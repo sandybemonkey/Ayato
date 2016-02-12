@@ -3,8 +3,16 @@ class BoardCtrl
 		angular.element(document).ready ->
 		    $('.toolti').tooltip()
 		    $('.modal-trigger').leanModal()
-		@board = boardData[0]
-		console.log boardData[0]
+		@board = boardData
+		console.log boardData
+		@toolsOn = false
+
+
+		@showTools = ->
+			if @toolsOn == false
+				@toolsOn = true
+			else
+				@toolsOn = false
 
 		@createSteps = (steps)->
 			console.log steps

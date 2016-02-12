@@ -13,8 +13,8 @@ class BoardRoute
 						controller: "BoardCtrl"
 						controllerAs: "Board"
 				resolve:
-					boardData: (Board)->
-						Board.getAll()
+					boardData: (Board, $stateParams)->
+						Board.getBoard($stateParams.boardId)
 
 
 

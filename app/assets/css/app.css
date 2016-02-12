@@ -1,11 +1,11 @@
 @import url(https://fonts.googleapis.com/css?family=Niconne);
 body{
-  background-color: #424242 ;
+  background-color: #bdbdbd ;
 }
 
 nav {
     color: #fff;
-    background-color: #212121;
+    background-color: #263238;
 }
 
 nav ul a {
@@ -15,6 +15,17 @@ nav ul a {
 h1 { 
     font-family: 'Niconne', cursive; 
     font-weight: 400; 
+}
+
+nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
+    height: 35px;
+    line-height: 30px;
+}
+nav .brand-logo{
+    font-size: 2.5rem;
+}
+.card {
+    background-color: #eceff1;
 }
 .welcome{
     margin-top: 7rem
@@ -28,7 +39,15 @@ h1 {
     font-size: 4rem;
     font-weight: 400; 
 }
-
+.oneBordTitle{
+    font-family: 'Niconne', cursive;
+    font-size: 40px;
+}
+.steps {
+    font-size: 30px;
+    font-family: 'Niconne', cursive;
+    color: #004d40;
+}
 .boardContent ul {
     margin-left: 90px;
     display: inline-table;
@@ -45,14 +64,7 @@ h1 {
 .side-nav a {
     color: #fff;
 }
-.fixed-action-btn {
-    position: relative; 
-    right: 23px;
-    bottom: 23px;
-    padding-top: 15px;
-    margin-bottom: 0;
-    z-index: 998;
-}
+s
 .btn, .btn-large {
     background-color: #ff6f00;
 }

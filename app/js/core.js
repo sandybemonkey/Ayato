@@ -11,6 +11,10 @@
 
 }).call(this);
 ;(function() {
+  angular.module('settingsModule', []);
+
+}).call(this);
+;(function() {
   angular.module('authModule').constant('FIREBASE_BDD_URL', 'https://ayatoapp.firebaseio.com/');
 
 }).call(this);
@@ -189,7 +193,7 @@
 
 }).call(this);
 ;(function() {
-  angular.module('Ayato', ['ui.router', 'firebase', 'App', 'authModule', 'boardModule']);
+  angular.module('Ayato', ['ui.router', 'firebase', 'App', 'authModule', 'boardModule', 'settingsModule']);
 
 }).call(this);
 ;(function() {
@@ -236,33 +240,6 @@
   angular.module('Ayato').config(AyatoRoute);
 
 }).call(this);
-;(function() {
-  var AppCtrl;
-
-  AppCtrl = (function() {
-    function AppCtrl(Auth, Board) {
-      angular.element(document).ready(function() {
-        $('.mogger').leanModal();
-        $('.modal-trigger').leanModal();
-        return $('.tooltipped').tooltip();
-      });
-      this.createBoard = function(newBoard) {
-
-        /*Pushing To Firebase */
-        Board.createBoard(newBoard);
-
-        /*Reseting Form */
-        return this.newBoard = {};
-      };
-    }
-
-    return AppCtrl;
-
-  })();
-
-  angular.module('App').controller('AppCtrl', AppCtrl);
-
-}).call(this);
 ;
 /* @ngInject */
 
@@ -297,6 +274,33 @@
   })();
 
   angular.module('authModule').config(Authroute);
+
+}).call(this);
+;(function() {
+  var AppCtrl;
+
+  AppCtrl = (function() {
+    function AppCtrl(Auth, Board) {
+      angular.element(document).ready(function() {
+        $('.mogger').leanModal();
+        $('.modal-trigger').leanModal();
+        return $('.tooltipped').tooltip();
+      });
+      this.createBoard = function(newBoard) {
+
+        /*Pushing To Firebase */
+        Board.createBoard(newBoard);
+
+        /*Reseting Form */
+        return this.newBoard = {};
+      };
+    }
+
+    return AppCtrl;
+
+  })();
+
+  angular.module('App').controller('AppCtrl', AppCtrl);
 
 }).call(this);
 ;
@@ -345,8 +349,8 @@
           }
         },
         resolve: {
-          boardData: function(Board) {
-            return Board.getAll();
+          boardData: function(Board, $stateParams) {
+            return Board.getBoard($stateParams.boardId);
           }
         }
       });
@@ -368,8 +372,16 @@
         $('.toolti').tooltip();
         return $('.modal-trigger').leanModal();
       });
-      this.board = boardData[0];
-      console.log(boardData[0]);
+      this.board = boardData;
+      console.log(boardData);
+      this.toolsOn = false;
+      this.showTools = function() {
+        if (this.toolsOn === false) {
+          return this.toolsOn = true;
+        } else {
+          return this.toolsOn = false;
+        }
+      };
       this.createSteps = function(steps) {
         return console.log(steps);
       };
@@ -493,5 +505,29 @@
   })();
 
   angular.module('boardModule').controller('BoardsCtrl', BoardsCtrl);
+
+}).call(this);
+;(function() {
+  var settingsRoute;
+
+  settingsRoute = (function() {
+    function settingsRoute($stateProvider, $urlRouterProvider, $locationProvider) {
+      $stateProvider.state('settings', {
+        url: "/",
+        views: {
+          'main': {
+            templateUrl: "views/Settings/settings.html",
+            controller: "settingsCtrl",
+            controllerAs: "settings"
+          }
+        }
+      });
+    }
+
+    return settingsRoute;
+
+  })();
+
+  angular.module('settingsModule').config(settingsRoute);
 
 }).call(this);

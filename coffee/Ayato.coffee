@@ -4,4 +4,5 @@ angular.module 'Ayato', [
 	'App'
 	'authModule'
 	'boardModule'
+	'settingsModule'
 ]
