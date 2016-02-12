@@ -1,0 +1,72 @@
+<div class="container center-align" ng-hide="Boards.boards == ''">
+  <h6>Filter By</h6>
+  
+  <button class="waves-effect waves-light waves-white btn-flat teal"
+    ng-click="Boards.reorderByBddOrder()">
+    <span ng-show="Boards.idOrder == '$id'">
+      Last Added
+    </span>
+    <span ng-show="Boards.idOrder == '-$id'">
+      First Added
+    </span>
+  </button>
+
+  <button class="waves-effect waves-light waves-white btn-flat teal"
+    ng-click="Boards.reorderByName()">
+    <span ng-hide="Boards.nameOrder == '-name'">
+      A-Z
+    </span>
+    <span ng-show="Boards.nameOrder == '-name'">
+      Z-A
+    </span>
+  </button>
+
+</div>
+<div class="row">
+  <div class="col s2" ng-repeat="board in Boards.boards | orderBy : Boards.order track by board.$id">
+    <div class="card">
+      <div class="card-content center-align">
+        <span class="card-title activator grey-text text-darken-4">
+          {{board.name}}
+          <i class="material-icons right">more_vert</i>
+        </span>
+        <p>
+          <strong class="orange-text activator">START</strong> 
+        </p>
+        <p> 
+          {{board.startingDate | date:' dd MMMM yyyy'}}
+        </p>
+        <br>
+        <p>
+          <strong class="green-text activator">END</strong> 
+        </p>
+        <p>
+          {{board.endingDate | date:' dd MMMM yyyy'}}
+        </p>
+      </div>
+      <div class="card-reveal center-align">
+        <span class="card-title grey-text text-darken-4">
+          {{board.name}}
+          <i class="material-icons right">close</i>
+        </span>
+        <p> {{board.description}}</p>
+        <p>
+          <a ui-sref="Oneboard({ boardId: board.$id})"
+            class="btn-floating">
+            <span>
+              <i class="small material-icons">visibility</i>
+            </span>
+          </a>
+          
+          <a href="#"
+          class="btn-floating red" 
+            ng-click="Boards.deleteBoard(board)">
+            <span>
+              <i class="small material-icons">delete</i>
+            </span>
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

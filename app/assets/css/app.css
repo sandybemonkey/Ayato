@@ -1,0 +1,77 @@
+@import url(https://fonts.googleapis.com/css?family=Niconne);
+body{
+  background-color: #424242 ;
+}
+
+nav {
+    color: #fff;
+    background-color: #212121;
+}
+
+nav ul a {
+    font-size: 1.9rem;
+}
+
+h1 { 
+    font-family: 'Niconne', cursive; 
+    font-weight: 400; 
+}
+.welcome{
+    margin-top: 7rem
+}
+.welcome h1{
+    font-size: 15rem
+}
+.welcome h3{
+    margin-top: 7rem;
+    font-family: 'Niconne', cursive;
+    font-size: 4rem;
+    font-weight: 400; 
+}
+
+.boardContent ul {
+    margin-left: 90px;
+    display: inline-table;
+    list-style-type: none;
+}
+
+.activator {
+    cursor: pointer;
+}
+
+.side-nav {
+    background-color: #fafafa;
+}
+.side-nav a {
+    color: #fff;
+}
+.fixed-action-btn {
+    position: relative; 
+    right: 23px;
+    bottom: 23px;
+    padding-top: 15px;
+    margin-bottom: 0;
+    z-index: 998;
+}
+.btn, .btn-large {
+    background-color: #ff6f00;
+}
+
+.input-field .prefix ~ input, .input-field .prefix ~ textarea {
+    margin-left: 3rem;
+    width: calc(50% - 3rem);
+    text-align: center;
+}
+
+.Niconned { 
+	font-family: 'Niconne', cursive; 
+	font-weight: 400;
+}
+
+.cardRevealMenu a {
+    color: #000;
+}
+
+#newProjectBtn{
+    margin-top: 1rem;
+}

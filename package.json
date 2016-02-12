@@ -1,0 +1,51 @@
+{
+  "name": "ayato",
+  "version": "0.0.1",
+  "description": "A Trello Like",
+  "main": "app/index.html",
+  "scripts": {
+    "test": "karma start --single-run --browsers PhantomJS"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sandybemonkey/Ayato.git"
+  },
+  "keywords": [
+    "angular",
+    "coffeescript"
+  ],
+  "author": "BeMonKey",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sandybemonkey/Ayato/issues"
+  },
+  "homepage": "https://github.com/sandybemonkey/Ayato#readme",
+  "devDependencies": {
+    "chai": "*",
+    "coffee-script": "*",
+    "gulp": "*",
+    "gulp-angular-templatecache": "*",
+    "gulp-bytediff": "*",
+    "gulp-coffee": "*",
+    "gulp-concat": "*",
+    "gulp-connect": "*",
+    "gulp-ignore": "*",
+    "gulp-load-plugins": "*",
+    "gulp-ng-annotate": "*",
+    "gulp-plumber": "*",
+    "gulp-uglify": "*",
+    "gulp-util": "*",
+    "karma": "*",
+    "karma-chai-sinon": "*",
+    "karma-chrome-launcher": "*",
+    "karma-coffee-preprocessor": "*",
+    "karma-coverage": "*",
+    "karma-firefox-launcher": "*",
+    "karma-mocha": "*",
+    "karma-mocha-reporter": "*",
+    "mocha": "*",
+    "require-dir": "*",
+    "sinon": "*",
+    "sinon-chai": "*"
+  }
+}

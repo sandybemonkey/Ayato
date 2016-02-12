@@ -1,0 +1,36 @@
+{
+  "name": "ayato",
+  "description": "A Trello Like",
+  "main": "app/index.html",
+  "authors": [
+    "BeMonKey"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "angular",
+    "coffeescript"
+  ],
+  "moduleType": [],
+  "homepage": "https://github.com/sandybemonkey/Ayato",
+  "private": true,
+  "dependencies": {
+    "angular-ui-router": "*",
+    "angular-animate": "*",
+    "angularfire": "*",
+    "angular": "*",
+    "angular-messages": "*",
+    "angular-mocks": "*",
+    "Materialize": "materialize#^0.97.5"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/libs/",
+    "test",
+    "tests"
+  ],
+  "resolutions": {
+    "angular": "1.5.0"
+  }
+}

@@ -1,0 +1,26 @@
+<div class="center-align">
+  <h1 class="animated bounceInDown">Register</h1>
+  <form class="col s6"
+        ng-submit="Auth.login(Auth.newUser)">
+      <div class="row">
+        <div class="input-field col s12">
+          <i class="material-icons prefix">email</i>
+          <input placeholder="Email" 
+            id="email" 
+            type="email" 
+            class="validate"
+            ng-model="Auth.newUser.email">
+        </div>
+        <div class="input-field col s12">
+          <i class="material-icons prefix">vpn_key</i>
+          <input id="last_name" 
+            type="password"
+            class="validate"
+            ng-model="Auth.newUser.password">
+        </div>
+      </div>
+      <button class="btn waves-effect waves-light" type="submit" name="action">Login
+        <i class="material-icons right">done</i>
+      </button>
+  </form>
+</div>
