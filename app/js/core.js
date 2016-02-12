@@ -21,7 +21,7 @@
   var Auth;
 
   Auth = (function() {
-    function Auth($log, $rootScope, FIREBASE_BDD_URL, $firebaseAuth) {
+    function Auth($log, $rootScope, FIREBASE_BDD_URL, $firebaseAuth, Users) {
       var authObj, ref;
       ref = new Firebase(FIREBASE_BDD_URL);
       authObj = $firebaseAuth(ref);
@@ -44,6 +44,10 @@
           password: user.password
         }).then((function(_this) {
           return function(authData) {
+            Users.createUser({
+              uid: authData.uid,
+              email: user.email
+            });
             return _this.login(user);
           };
         })(this))["catch"](function(err) {
@@ -75,6 +79,54 @@
   })();
 
   angular.module('authModule').service('Auth', Auth);
+
+}).call(this);
+;
+/* @ngInject */
+
+(function() {
+  var Users;
+
+  Users = (function() {
+    function Users($log, FIREBASE_BDD_URL, $firebaseArray) {
+      var usersArray, usersRef;
+      usersRef = new Firebase(FIREBASE_BDD_URL + "/users");
+      usersArray = $firebaseArray(usersRef);
+      this.getAll = function() {
+        return usersArray;
+      };
+      this.getUser = function(id) {
+        return usersArray.$getRecord(id);
+      };
+      this.createUser = function(user) {
+        return usersArray.$add(user).then(function(ref) {
+          var id;
+          id = ref.key();
+          return $log.info("added record with id " + id);
+        });
+      };
+      this.updateUser = function(user) {
+        var userInBdd;
+        userInBdd = usersArray.$getRecord(user.$id);
+        if (userInBdd !== '') {
+          userInBdd = user;
+          return usersArray.$save(userInBdd).then(function(ref) {
+            return console.log(ref.key() === userInBdd.$id);
+          });
+        } else {
+          return console.log("Can't find this data");
+        }
+      };
+      this.deleteUser = function(user) {
+        return usersArray.$remove(user);
+      };
+    }
+
+    return Users;
+
+  })();
+
+  angular.module('authModule').service('Users', Users);
 
 }).call(this);
 ;
@@ -184,6 +236,33 @@
   angular.module('Ayato').config(AyatoRoute);
 
 }).call(this);
+;(function() {
+  var AppCtrl;
+
+  AppCtrl = (function() {
+    function AppCtrl(Auth, Board) {
+      angular.element(document).ready(function() {
+        $('.mogger').leanModal();
+        $('.modal-trigger').leanModal();
+        return $('.tooltipped').tooltip();
+      });
+      this.createBoard = function(newBoard) {
+
+        /*Pushing To Firebase */
+        Board.createBoard(newBoard);
+
+        /*Reseting Form */
+        return this.newBoard = {};
+      };
+    }
+
+    return AppCtrl;
+
+  })();
+
+  angular.module('App').controller('AppCtrl', AppCtrl);
+
+}).call(this);
 ;
 /* @ngInject */
 
@@ -218,33 +297,6 @@
   })();
 
   angular.module('authModule').config(Authroute);
-
-}).call(this);
-;(function() {
-  var AppCtrl;
-
-  AppCtrl = (function() {
-    function AppCtrl(Auth, Board) {
-      angular.element(document).ready(function() {
-        $('.mogger').leanModal();
-        $('.modal-trigger').leanModal();
-        return $('.tooltipped').tooltip();
-      });
-      this.createBoard = function(newBoard) {
-
-        /*Pushing To Firebase */
-        Board.createBoard(newBoard);
-
-        /*Reseting Form */
-        return this.newBoard = {};
-      };
-    }
-
-    return AppCtrl;
-
-  })();
-
-  angular.module('App').controller('AppCtrl', AppCtrl);
 
 }).call(this);
 ;

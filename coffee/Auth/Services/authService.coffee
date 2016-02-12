@@ -1,7 +1,7 @@
 ### @ngInject ###
 class Auth
 
-  constructor: ($log, $rootScope, FIREBASE_BDD_URL, $firebaseAuth) ->
+  constructor: ($log, $rootScope, FIREBASE_BDD_URL, $firebaseAuth, Users) ->
     ref = new Firebase FIREBASE_BDD_URL
     authObj = $firebaseAuth ref
     
@@ -26,6 +26,9 @@ class Auth
         password: user.password
       )
       .then((authData)=>
+        Users.createUser 
+          uid: authData.uid
+          email: user.email
         @login user
       )
       .catch((err)->
