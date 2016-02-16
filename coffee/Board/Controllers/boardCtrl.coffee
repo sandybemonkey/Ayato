@@ -2,12 +2,9 @@ class BoardCtrl
 	constructor: (Auth, Board, boardData)->
 		angular.element(document).ready ->
 		    $('.toolti').tooltip()
-		    $('.modal-trigger').leanModal()
+		
 		@board = boardData
-		console.log boardData
 		@toolsOn = false
-
-
 		@showTools = ->
 			if @toolsOn == false
 				@toolsOn = true

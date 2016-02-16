@@ -1,4 +1,3 @@
-### @ngInject ###
 class Authroute
 
   constructor: ($stateProvider, $urlRouterProvider, $locationProvider) ->

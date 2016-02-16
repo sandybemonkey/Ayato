@@ -3,11 +3,11 @@
 
 }).call(this);
 ;(function() {
-  angular.module('authModule', []);
+  angular.module('boardModule', []);
 
 }).call(this);
 ;(function() {
-  angular.module('boardModule', []);
+  angular.module('authModule', []);
 
 }).call(this);
 ;(function() {
@@ -22,6 +22,62 @@
 /* @ngInject */
 
 (function() {
+  var Board;
+
+  Board = (function() {
+    function Board($log, FIREBASE_BDD_URL, $firebaseArray) {
+      var boardArray, boardRef;
+      boardRef = new Firebase(FIREBASE_BDD_URL + "/boards");
+      boardArray = $firebaseArray(boardRef);
+      return {
+        getAll: function() {
+          return boardArray;
+        },
+        getBoard: function(id) {
+          return boardArray.$getRecord(id);
+        },
+        createBoard: function(board) {
+
+          /*getting the Dates from the form */
+          var enddate, stgDate;
+          stgDate = board.startingDate;
+          enddate = board.endingdate;
+
+          /*Formating the Dates to string for firebase push */
+          board.startingDate = new Date(stgDate).getTime();
+          board.endingDate = new Date(enddate).getTime();
+          return boardArray.$add(board).then(function(ref) {
+            var id;
+            id = ref.key();
+            return $log.info("added record with id " + id);
+          });
+        },
+        updateBoard: function(board) {
+          var boardInBdd;
+          boardInBdd = boardArray.$getRecord(board.$id);
+          if (boardInBdd !== '') {
+            boardInBdd.title = board.title;
+            return boardArray.$save(boardInBdd).then(function(ref) {
+              return console.log(ref.key() === boardInBdd.$id);
+            });
+          } else {
+            return console.log("Can't find this data");
+          }
+        },
+        deleteBoard: function(board) {
+          return boardArray.$remove(board);
+        }
+      };
+    }
+
+    return Board;
+
+  })();
+
+  angular.module('boardModule').factory('Board', Board);
+
+}).call(this);
+;(function() {
   var Auth;
 
   Auth = (function() {
@@ -85,10 +141,7 @@
   angular.module('authModule').service('Auth', Auth);
 
 }).call(this);
-;
-/* @ngInject */
-
-(function() {
+;(function() {
   var Users;
 
   Users = (function() {
@@ -131,65 +184,6 @@
   })();
 
   angular.module('authModule').service('Users', Users);
-
-}).call(this);
-;
-/* @ngInject */
-
-(function() {
-  var Board;
-
-  Board = (function() {
-    function Board($log, FIREBASE_BDD_URL, $firebaseArray) {
-      var boardArray, boardRef;
-      boardRef = new Firebase(FIREBASE_BDD_URL + "/boards");
-      boardArray = $firebaseArray(boardRef);
-      return {
-        getAll: function() {
-          return boardArray;
-        },
-        getBoard: function(id) {
-          return boardArray.$getRecord(id);
-        },
-        createBoard: function(board) {
-
-          /*getting the Dates from the form */
-          var enddate, stgDate;
-          stgDate = board.startingDate;
-          enddate = board.endingdate;
-
-          /*Formating the Dates to string for firebase push */
-          board.startingDate = new Date(stgDate).getTime();
-          board.endingDate = new Date(enddate).getTime();
-          return boardArray.$add(board).then(function(ref) {
-            var id;
-            id = ref.key();
-            return $log.info("added record with id " + id);
-          });
-        },
-        updateBoard: function(board) {
-          var boardInBdd;
-          boardInBdd = boardArray.$getRecord(board.$id);
-          if (boardInBdd !== '') {
-            boardInBdd.title = board.title;
-            return boardArray.$save(boardInBdd).then(function(ref) {
-              return console.log(ref.key() === boardInBdd.$id);
-            });
-          } else {
-            return console.log("Can't find this data");
-          }
-        },
-        deleteBoard: function(board) {
-          return boardArray.$remove(board);
-        }
-      };
-    }
-
-    return Board;
-
-  })();
-
-  angular.module('boardModule').factory('Board', Board);
 
 }).call(this);
 ;(function() {
@@ -240,98 +234,17 @@
   angular.module('Ayato').config(AyatoRoute);
 
 }).call(this);
-;
-/* @ngInject */
-
-(function() {
-  var Authroute;
-
-  Authroute = (function() {
-    function Authroute($stateProvider, $urlRouterProvider, $locationProvider) {
-      $stateProvider.state('login', {
-        url: "/login",
-        views: {
-          'main': {
-            templateUrl: "views/Auth/login.html",
-            controller: "AuthCtrl",
-            controllerAs: "Auth"
-          }
-        }
-      }).state('signup', {
-        url: "/signup",
-        views: {
-          'main': {
-            templateUrl: "views/Auth/signup.html",
-            controller: "AuthCtrl",
-            controllerAs: "Auth"
-          }
-        }
-      });
-    }
-
-    return Authroute;
-
-  })();
-
-  angular.module('authModule').config(Authroute);
-
-}).call(this);
 ;(function() {
   var AppCtrl;
 
   AppCtrl = (function() {
-    function AppCtrl(Auth, Board) {
-      angular.element(document).ready(function() {
-        $('.mogger').leanModal();
-        $('.modal-trigger').leanModal();
-        return $('.tooltipped').tooltip();
-      });
-      this.createBoard = function(newBoard) {
-
-        /*Pushing To Firebase */
-        Board.createBoard(newBoard);
-
-        /*Reseting Form */
-        return this.newBoard = {};
-      };
-    }
+    function AppCtrl(Auth, Board) {}
 
     return AppCtrl;
 
   })();
 
   angular.module('App').controller('AppCtrl', AppCtrl);
-
-}).call(this);
-;
-/* @ngInject */
-
-(function() {
-  var AuthCtrl;
-
-  AuthCtrl = (function() {
-    function AuthCtrl($log, $state, Auth) {
-      this.login = function(user) {
-        return Auth.login(user).then(function(userData) {
-          return $state.go('boards');
-        });
-      };
-      this.signup = function(user) {
-        return Auth.signup(user).then(function(data) {
-          return $state.go('boards');
-        });
-      };
-      this.logOut = function() {
-        Auth.logout();
-        return $state.go('login');
-      };
-    }
-
-    return AuthCtrl;
-
-  })();
-
-  angular.module('authModule').controller('AuthCtrl', AuthCtrl);
 
 }).call(this);
 ;(function() {
@@ -369,11 +282,9 @@
   BoardCtrl = (function() {
     function BoardCtrl(Auth, Board, boardData) {
       angular.element(document).ready(function() {
-        $('.toolti').tooltip();
-        return $('.modal-trigger').leanModal();
+        return $('.toolti').tooltip();
       });
       this.board = boardData;
-      console.log(boardData);
       this.toolsOn = false;
       this.showTools = function() {
         if (this.toolsOn === false) {
@@ -469,8 +380,19 @@
 
   BoardsCtrl = (function() {
     function BoardsCtrl(Auth, Board) {
-      this.isAuth = '';
-      console.log(this.isAuth);
+      angular.element(document).ready(function() {
+        return $('.collapsible').collapsible({
+          accordion: false
+        });
+      });
+      this.createBoard = function(newBoard) {
+
+        /*Pushing To Firebase */
+        Board.createBoard(newBoard);
+
+        /*Reseting Form */
+        return this.newBoard = {};
+      };
       this.boards = Board.getAll();
       this.idOrder = '$id';
       this.nameOrder = '';
@@ -484,10 +406,7 @@
         }
       };
       this.reorderByName = function() {
-        if (this.nameOrder === '') {
-          this.nameOrder = 'name';
-          return this.order = this.nameOrder;
-        } else if (this.nameOrder === 'name') {
+        if (this.nameOrder === 'name' || '') {
           this.nameOrder = '-name';
           return this.order = this.nameOrder;
         } else {
@@ -508,17 +427,78 @@
 
 }).call(this);
 ;(function() {
+  var Authroute;
+
+  Authroute = (function() {
+    function Authroute($stateProvider, $urlRouterProvider, $locationProvider) {
+      $stateProvider.state('login', {
+        url: "/login",
+        views: {
+          'main': {
+            templateUrl: "views/Auth/login.html",
+            controller: "AuthCtrl",
+            controllerAs: "Auth"
+          }
+        }
+      }).state('signup', {
+        url: "/signup",
+        views: {
+          'main': {
+            templateUrl: "views/Auth/signup.html",
+            controller: "AuthCtrl",
+            controllerAs: "Auth"
+          }
+        }
+      });
+    }
+
+    return Authroute;
+
+  })();
+
+  angular.module('authModule').config(Authroute);
+
+}).call(this);
+;(function() {
+  var AuthCtrl;
+
+  AuthCtrl = (function() {
+    function AuthCtrl($log, $state, Auth) {
+      this.login = function(user) {
+        return Auth.login(user).then(function(userData) {
+          return $state.go('boards');
+        });
+      };
+      this.signup = function(user) {
+        return Auth.signup(user).then(function(data) {
+          return $state.go('boards');
+        });
+      };
+      this.logOut = function() {
+        Auth.logout();
+        return $state.go('login');
+      };
+    }
+
+    return AuthCtrl;
+
+  })();
+
+  angular.module('authModule').controller('AuthCtrl', AuthCtrl);
+
+}).call(this);
+;(function() {
   var settingsRoute;
 
   settingsRoute = (function() {
     function settingsRoute($stateProvider, $urlRouterProvider, $locationProvider) {
       $stateProvider.state('settings', {
-        url: "/",
+        url: "/settings",
         views: {
           'main': {
             templateUrl: "views/Settings/settings.html",
-            controller: "settingsCtrl",
-            controllerAs: "settings"
+            controller: "SettingsCtrl",
+            controllerAs: "Settings"
           }
         }
       });
@@ -529,5 +509,18 @@
   })();
 
   angular.module('settingsModule').config(settingsRoute);
+
+}).call(this);
+;(function() {
+  var SettingsCtrl;
+
+  SettingsCtrl = (function() {
+    function SettingsCtrl(Users) {}
+
+    return SettingsCtrl;
+
+  })();
+
+  angular.module('settingsModule').controller('SettingsCtrl', SettingsCtrl);
 
 }).call(this);

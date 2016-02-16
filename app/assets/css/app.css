@@ -18,11 +18,17 @@ h1 {
 }
 
 nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
-    height: 35px;
-    line-height: 30px;
+    height: 40px;
+    line-height: 35px;
 }
 nav .brand-logo{
-    font-size: 2.5rem;
+    font-size: 2.8rem;
+}
+.newBoard{
+    width: 30rem;
+}
+.newBoard form{
+    background-color: #fff;
 }
 .card {
     background-color: #eceff1;
@@ -44,7 +50,7 @@ nav .brand-logo{
     font-size: 40px;
 }
 .steps {
-    font-size: 30px;
+    font-size: 3rem;
     font-family: 'Niconne', cursive;
     color: #004d40;
 }

@@ -1,27 +1,101 @@
-<div class="container center-align" ng-hide="Boards.boards == ''">
-  <h6>Filter By</h6>
-  
-  <button class="waves-effect waves-light waves-white btn-flat teal"
-    ng-click="Boards.reorderByBddOrder()">
-    <span ng-show="Boards.idOrder == '$id'">
-      Last Added
-    </span>
-    <span ng-show="Boards.idOrder == '-$id'">
-      First Added
-    </span>
-  </button>
+<div class="container center-align animated bounceInDown" ng-hide="Boards.boards == ''">
+  <center>
+    <div class="row">
+      <div class="col s6">
+        <div class="newBoard">
+          <ul class="collapsible popout" data-collapsible="accordion">
+            <li>
+              <div class="collapsible-header">Create Board</div>
+              <div class="collapsible-body">
+                <h5>New Board</h5>
+                <form class="col s12">
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <label for="Name">Name</label>
+                      <br>
+                      <input 
+                        placeholder="Name" 
+                        id="Name" 
+                        type="text" 
+                        class="validate"
+                        ng-model="Boards.newBoard.name"
+                        required>
+                    </div>
+                    
+                    <div class="input-field col s6">
+                      <label for="startingDate">Starting Date</label>
+                      <br>
+                      <input 
+                        type="date" 
+                        class="datepicker"
+                        ng-model="Boards.newBoard.startingDate"
+                        required>
+                    </div>
 
-  <button class="waves-effect waves-light waves-white btn-flat teal"
-    ng-click="Boards.reorderByName()">
-    <span ng-hide="Boards.nameOrder == '-name'">
-      A-Z
-    </span>
-    <span ng-show="Boards.nameOrder == '-name'">
-      Z-A
-    </span>
-  </button>
+                    <div class="input-field col s6">
+                      <label for="endingDate">Ending Date</label>
+                      <br>
+                      <input 
+                        type="date" 
+                        class="datepicker"
+                        ng-model="Boards.newBoard.endingdate"
+                        required>
+                    </div>
+                    
+                    <div class="input-field col s12">
+                      <textarea 
+                        id="description" 
+                        class="materialize-textarea"
+                        ng-model="Boards.newBoard.description"></textarea>
+                      <label for="description">Description</label>
+                    </div>
+                  </div>
+                  <center>
+                    <a
+                      class="waves-effect waves-green btn-flat green collapsible" data-collapsible="accordion"
+                      ng-click="Boards.createBoard(Boards.newBoard)">
+                      Create
+                    </a>
+                  </center>
+                </form>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
 
+      <div class="col s6">
+        <div class="newBoard">
+          <ul class="collapsible popout" data-collapsible="accordion">
+            <li>
+              <div class="collapsible-header">Filters</div>
+              <div class="collapsible-body">
+                <a ng-click="Boards.reorderByBddOrder()" class="waves-effect waves-light waves-white btn teal">
+                  <span ng-show="Boards.idOrder == '$id'">
+                    Last Added
+                  </span>
+                  <span ng-show="Boards.idOrder == '-$id'">
+                    First Added
+                  </span>
+                </a>
+
+                <a ng-click="Boards.reorderByName()" class="waves-effect waves-light waves-white btn teal">
+                  <span ng-hide="Boards.nameOrder == '-name'">
+                    Z-A
+                  </span>
+                  <span ng-show="Boards.nameOrder == '-name'">
+                    A-Z
+                  </span>
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </center>
 </div>
+
 <div class="row">
   <div class="col s2" ng-repeat="board in Boards.boards | orderBy : Boards.order track by board.$id">
     <div class="card blue-grey lighten-5">
@@ -58,8 +132,7 @@
             </span>
           </a>
           
-          <a href="#"
-          class="btn-floating red" 
+          <a class="btn-floating red" 
             ng-click="Boards.deleteBoard(board)">
             <span>
               <i class="small material-icons">delete</i>
@@ -70,3 +143,4 @@
     </div>
   </div>
 </div>
+

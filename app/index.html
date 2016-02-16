@@ -14,12 +14,15 @@
 				<ul class="left">
 			    	<li ng-show="user"><a ui-sref="boards" class="teal-text">Boards</a></li>
 			 	</ul>
-				<a href="#" class="brand-logo center teal-text" >
+				<a ng-hide="user" ui-sref="home" class="brand-logo center teal-text" >
+					Ayato
+				</a>
+				<a ng-show="user" ui-sref="boards" class="brand-logo center teal-text" >
 					Ayato
 				</a>
 				<ul class="right">
 			    	<li ng-show="user">
-			    		<a href="#!" class="teal-text">Settings</a>
+			    		<a ui-sref="settings" class="teal-text">Settings</a>
 			    	</li>
 			    	<li ng-hide="user">
 			    		<a ui-sref="signup" class="teal-text">
@@ -39,10 +42,10 @@
 			 	</ul>
 				<!--  -->
 			</nav>
-			<div ui-view="main"></div>
+			<div ui-view="main" class="animated bounceInDown"></div>
 			
 			<!-- main Content: Boards List -->
-			<div ui-view="boards"></div>   
+			<div ui-view="boards" class="animated bounceInDown"></div>   
 		</div>
         
 

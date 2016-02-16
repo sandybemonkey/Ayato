@@ -1,7 +1,16 @@
 class BoardsCtrl
 	constructor: (Auth, Board)-> 
-		@isAuth = ''   
-		console.log @isAuth
+		angular.element(document).ready ->
+			$('.collapsible').collapsible({
+		      accordion : false 
+		    })
+
+		@createBoard = (newBoard)->			
+			###Pushing To Firebase###
+			Board.createBoard(newBoard)
+			###Reseting Form###
+			@newBoard = {}
+			
 		@boards = Board.getAll()
 		@idOrder = '$id'
 		@nameOrder = ''
@@ -15,10 +24,7 @@ class BoardsCtrl
 				@order = @idOrder
 		
 		@reorderByName = ()->
-			if @nameOrder == ''
-				@nameOrder = 'name'
-				@order = @nameOrder
-			else if @nameOrder == 'name'
+			if @nameOrder == 'name' or ''
 				@nameOrder = '-name'
 				@order = @nameOrder			
 			else

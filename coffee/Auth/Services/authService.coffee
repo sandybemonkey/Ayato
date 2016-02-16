@@ -1,4 +1,3 @@
-### @ngInject ###
 class Auth
 
   constructor: ($log, $rootScope, FIREBASE_BDD_URL, $firebaseAuth, Users) ->

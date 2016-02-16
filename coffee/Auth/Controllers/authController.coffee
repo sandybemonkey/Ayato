@@ -1,4 +1,3 @@
-### @ngInject ###
 class AuthCtrl
   constructor: ($log, $state, Auth) ->
     @login = (user)->
