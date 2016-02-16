@@ -1,5 +1,3 @@
-### @ngInject ###
-
 class Board
   constructor: ($log, FIREBASE_BDD_URL, $firebaseArray) ->
     boardRef = new Firebase FIREBASE_BDD_URL + "/boards"

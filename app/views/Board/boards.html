@@ -25,8 +25,8 @@
                     <div class="input-field col s6">
                       <label for="startingDate">Starting Date</label>
                       <br>
-                      <input 
-                        type="date" 
+                      <input input-date 
+                        type="text" 
                         class="datepicker"
                         ng-model="Boards.newBoard.startingDate"
                         required>
@@ -35,11 +35,25 @@
                     <div class="input-field col s6">
                       <label for="endingDate">Ending Date</label>
                       <br>
-                      <input 
-                        type="date" 
+                      <input input-date 
+                        type="text" 
                         class="datepicker"
                         ng-model="Boards.newBoard.endingdate"
                         required>
+                    </div>
+
+                    <div class="input-field col s6">
+                      <label for="endingDate">Owner</label>
+                      <select class="" ng-model="Boards.newBoard.owner" material-select watch>
+                          <option ng-repeat="value in select.choices">{{value}}</option>
+                      </select>
+                    </div>
+
+                    <div class="input-field col s6">
+                      <label for="endingDate">Collabs</label>
+                      <select class="" ng-model="Boards.newBoard.collabs" material-select watch>
+                          <option ng-repeat="value in select.choices">{{value}}</option>
+                      </select>
                     </div>
                     
                     <div class="input-field col s12">

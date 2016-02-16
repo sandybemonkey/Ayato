@@ -20,7 +20,8 @@
     "angular": "*",
     "angular-messages": "*",
     "angular-mocks": "*",
-    "Materialize": "materialize#^0.97.5"
+    "Materialize": "materialize#^0.97.5",
+    "angular-materialize": "*"
   },
   "ignore": [
     "**/.*",
