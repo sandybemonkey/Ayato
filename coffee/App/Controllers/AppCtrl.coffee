@@ -1,5 +1,10 @@
 class AppCtrl
-	constructor: (Auth, Board)->
+	constructor: (Auth, Board, $rootScope, $state)->
+		angular.element(document).ready ->
+			$('.collapsible').collapsible
+			    accordion : false
+		if $rootScope.user
+			$state.go 'boards'
 		
 
 angular

@@ -15,6 +15,10 @@
 
 }).call(this);
 ;(function() {
+  angular.module('userModule', []);
+
+}).call(this);
+;(function() {
   angular.module('authModule').constant('FIREBASE_BDD_URL', 'https://ayatoapp.firebaseio.com/');
 
 }).call(this);
@@ -27,7 +31,13 @@
       ref = new Firebase(FIREBASE_BDD_URL);
       authObj = $firebaseAuth(ref);
       authObj.$onAuth(function(data) {
-        return $rootScope.user = data;
+        var userData;
+        if (data) {
+          userData = Users.getUser(data.uid);
+          userData.provider = data.provider;
+          userData.password = data.password;
+          return $rootScope.user = userData;
+        }
       });
       this.login = function(user) {
         return authObj.$authWithPassword({
@@ -46,8 +56,10 @@
         }).then((function(_this) {
           return function(authData) {
             Users.createUser({
+              timestamp: Firebase.ServerValue.TIMESTAMP,
               uid: authData.uid,
-              email: user.email
+              email: user.email,
+              name: user.name
             });
             return _this.login(user);
           };
@@ -80,51 +92,6 @@
   })();
 
   angular.module('authModule').service('Auth', Auth);
-
-}).call(this);
-;(function() {
-  var Users;
-
-  Users = (function() {
-    function Users($log, FIREBASE_BDD_URL, $firebaseArray) {
-      var usersArray, usersRef;
-      usersRef = new Firebase(FIREBASE_BDD_URL + "/users");
-      usersArray = $firebaseArray(usersRef);
-      this.getAll = function() {
-        return usersArray;
-      };
-      this.getUser = function(id) {
-        return usersArray.$getRecord(id);
-      };
-      this.createUser = function(user) {
-        return usersArray.$add(user).then(function(ref) {
-          var id;
-          id = ref.key();
-          return $log.info("added record with id " + id);
-        });
-      };
-      this.updateUser = function(user) {
-        var userInBdd;
-        userInBdd = usersArray.$getRecord(user.$id);
-        if (userInBdd !== '') {
-          userInBdd = user;
-          return usersArray.$save(userInBdd).then(function(ref) {
-            return console.log(ref.key() === userInBdd.$id);
-          });
-        } else {
-          return console.log("Can't find this data");
-        }
-      };
-      this.deleteUser = function(user) {
-        return usersArray.$remove(user);
-      };
-    }
-
-    return Users;
-
-  })();
-
-  angular.module('authModule').service('Users', Users);
 
 }).call(this);
 ;(function() {
@@ -184,7 +151,50 @@
 
 }).call(this);
 ;(function() {
-  angular.module('Ayato', ['ui.router', 'firebase', 'ui.materialize', 'App', 'authModule', 'boardModule', 'settingsModule']);
+  var Users;
+
+  Users = (function() {
+    function Users($log, $rootScope, FIREBASE_BDD_URL, $firebaseArray) {
+      var usersArray, usersRef;
+      usersRef = new Firebase(FIREBASE_BDD_URL + "/users");
+      usersArray = $firebaseArray(usersRef);
+      this.getAll = function() {
+        return usersArray;
+      };
+      this.getUser = function(id) {
+        return usersArray.$getRecord(id);
+      };
+      this.createUser = function(user) {
+        var newUser;
+        newUser = $firebaseArray(usersRef.child(user.uid));
+        return usersRef.child(user.uid).set(user);
+      };
+      this.updateUser = function(user) {
+        var userInBdd;
+        userInBdd = usersArray.$getRecord(user.$id);
+        if (userInBdd !== '') {
+          userInBdd = user;
+          return usersArray.$save(userInBdd).then(function(ref) {
+            return console.log(ref.key() === userInBdd.$id);
+          });
+        } else {
+          return console.log("Can't find this data");
+        }
+      };
+      this.deleteUser = function(user) {
+        return usersArray.$remove(user);
+      };
+    }
+
+    return Users;
+
+  })();
+
+  angular.module('authModule').service('Users', Users);
+
+}).call(this);
+;(function() {
+  angular.module('Ayato', ['ui.router', 'ui.materialize', 'firebase', 'App', 'authModule', 'boardModule', 'userModule', 'settingsModule']);
 
 }).call(this);
 ;(function() {
@@ -202,25 +212,6 @@
             controllerAs: "App"
           }
         }
-      }).state('boards', {
-        url: "/boards",
-        views: {
-          'main': {
-            templateUrl: "views/App/home.html",
-            controller: "AppCtrl",
-            controllerAs: "App"
-          },
-          'boards': {
-            templateUrl: "views/Board/boards.html",
-            controller: "BoardsCtrl",
-            controllerAs: "Boards",
-            resolve: {
-              "isAuth": function(Auth) {
-                return Auth.requireAuth();
-              }
-            }
-          }
-        }
       });
     }
 
@@ -229,19 +220,6 @@
   })();
 
   angular.module('Ayato').config(AyatoRoute);
-
-}).call(this);
-;(function() {
-  var AppCtrl;
-
-  AppCtrl = (function() {
-    function AppCtrl(Auth, Board) {}
-
-    return AppCtrl;
-
-  })();
-
-  angular.module('App').controller('AppCtrl', AppCtrl);
 
 }).call(this);
 ;(function() {
@@ -278,6 +256,28 @@
 
 }).call(this);
 ;(function() {
+  var AppCtrl;
+
+  AppCtrl = (function() {
+    function AppCtrl(Auth, Board, $rootScope, $state) {
+      angular.element(document).ready(function() {
+        return $('.collapsible').collapsible({
+          accordion: false
+        });
+      });
+      if ($rootScope.user) {
+        $state.go('boards');
+      }
+    }
+
+    return AppCtrl;
+
+  })();
+
+  angular.module('App').controller('AppCtrl', AppCtrl);
+
+}).call(this);
+;(function() {
   var AuthCtrl;
 
   AuthCtrl = (function() {
@@ -310,7 +310,21 @@
 
   BoardRoute = (function() {
     function BoardRoute($stateProvider, $urlRouterProvider, $locationProvider) {
-      $stateProvider.state('Oneboard', {
+      $stateProvider.state('boards', {
+        url: "/boards",
+        views: {
+          'boards': {
+            templateUrl: "views/Board/boards.html",
+            controller: "BoardsCtrl",
+            controllerAs: "Boards",
+            resolve: {
+              "isAuth": function(Auth) {
+                return Auth.requireAuth();
+              }
+            }
+          }
+        }
+      }).state('Oneboard', {
         url: "/board/:boardId",
         views: {
           'boards': {
@@ -437,12 +451,7 @@
   var BoardsCtrl;
 
   BoardsCtrl = (function() {
-    function BoardsCtrl(Auth, Board) {
-      angular.element(document).ready(function() {
-        return $('.collapsible').collapsible({
-          accordion: false
-        });
-      });
+    function BoardsCtrl(Auth, Board, Users) {
       this.createBoard = function(newBoard) {
 
         /*Pushing To Firebase */
@@ -451,6 +460,7 @@
         /*Reseting Form */
         return this.newBoard = {};
       };
+      this.users = Users.getAll();
       this.boards = Board.getAll();
       this.idOrder = '$id';
       this.nameOrder = '';

@@ -1,7 +1,8 @@
 class Users
-  constructor: ($log, FIREBASE_BDD_URL, $firebaseArray) ->
+  constructor: ($log, $rootScope, FIREBASE_BDD_URL, $firebaseArray) ->
     usersRef = new Firebase FIREBASE_BDD_URL + "/users"
     usersArray = $firebaseArray usersRef
+    
    
     @getAll = ()->
       usersArray
@@ -10,11 +11,9 @@ class Users
       usersArray.$getRecord id
 
     @createUser = (user)->
-      usersArray
-        .$add(user)
-        .then (ref)->
-          id = ref.key()
-          $log.info "added record with id " + id
+      newUser = $firebaseArray usersRef.child user.uid
+      usersRef.child user.uid
+        .set(user)
 
     @updateUser = (user) ->
       userInBdd = usersArray.$getRecord user.$id

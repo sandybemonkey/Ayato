@@ -5,7 +5,11 @@ class Auth
     authObj = $firebaseAuth ref
     
     authObj.$onAuth (data)->
-      $rootScope.user = data
+      if data
+        userData = Users.getUser data.uid
+        userData.provider = data.provider
+        userData.password = data.password
+        $rootScope.user = userData
     
     @login = (user)->
       authObj.$authWithPassword (
@@ -25,9 +29,11 @@ class Auth
         password: user.password
       )
       .then((authData)=>
-        Users.createUser 
+        Users.createUser
+          timestamp: Firebase.ServerValue.TIMESTAMP
           uid: authData.uid
           email: user.email
+          name: user.name
         @login user
       )
       .catch((err)->

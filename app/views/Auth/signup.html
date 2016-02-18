@@ -4,6 +4,14 @@
         ng-submit="Auth.signup(Auth.user)">
       <div class="row">
         <div class="input-field col s12">
+          <i class="material-icons prefix">person_pin</i>
+          <input placeholder="Name" 
+            id="name" 
+            type="text" 
+            class="validate"
+            ng-model="Auth.user.name">
+        </div>
+        <div class="input-field col s12">
           <i class="material-icons prefix">email</i>
           <input placeholder="Email" 
             id="email" 

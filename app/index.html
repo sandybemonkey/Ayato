@@ -3,18 +3,19 @@
 	<head>
 		<title>Ayato</title>
 		<!-------------- stylesheets -------------->
-	    <link rel="stylesheet" href="libs/Materialize/dist/css/materialize.css">
+		<link rel="stylesheet" href="assets/css/animate.css">
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
     	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	    <link rel="stylesheet" href="assets/css/animate.css">
+	    
 	    <link rel="stylesheet" href="assets/css/app.css">
 	</head>
 	<body ng-app="Ayato">
 		<div>
-			<nav class="container Niconned">
+			<nav class="container">
 				<ul class="left">
 			    	<li ng-show="user"><a ui-sref="boards" class="teal-text">Boards</a></li>
 			 	</ul>
-				<a ng-hide="user" ui-sref="home" class="brand-logo center teal-text" >
+				<a ng-hide="user" ui-sref="home" class="brand-logo center teal-text Niconned" >
 					Ayato
 				</a>
 				<a ng-show="user" ui-sref="boards" class="brand-logo center teal-text" >
@@ -22,7 +23,8 @@
 				</a>
 				<ul class="right">
 			    	<li ng-show="user">
-			    		<a ui-sref="settings" class="teal-text">Settings</a>
+			    		
+			    		<a ui-sref="settings" class="teal-text"><img ng-show="user.password.profileImageURL" height="35rem" ng-src="{{user.password.profileImageURL}}">{{user.name}}</a>
 			    	</li>
 			    	<li ng-hide="user">
 			    		<a ui-sref="signup" class="teal-text">

@@ -24,8 +24,12 @@ nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
 nav .brand-logo{
     font-size: 2.8rem;
 }
+.collapsible-body p {
+    margin: 0;
+    padding: 0.1rem; */
+}
 .newBoard{
-    width: 30rem;
+    width: 23rem;
 }
 .newBoard form{
     background-color: #fff;

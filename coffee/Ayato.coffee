@@ -1,9 +1,11 @@
-angular.module 'Ayato', [
-	'ui.router'
-	'firebase'
-	'ui.materialize'
-	'App'
-	'authModule'
-	'boardModule'
-	'settingsModule'
-]
+angular
+	.module 'Ayato', [
+		'ui.router'
+		'ui.materialize'
+		'firebase'
+		'App'
+		'authModule'
+		'boardModule'
+		'userModule'
+		'settingsModule'
+	]

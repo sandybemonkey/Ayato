@@ -1,16 +1,13 @@
 class BoardsCtrl
-	constructor: (Auth, Board)-> 
-		angular.element(document).ready ->
-			$('.collapsible').collapsible({
-		      accordion : false 
-		    })
-
+	constructor: (Auth, Board, Users)->
+		
 		@createBoard = (newBoard)->			
 			###Pushing To Firebase###
 			Board.createBoard(newBoard)
 			###Reseting Form###
 			@newBoard = {}
 			
+		@users = Users.getAll()
 		@boards = Board.getAll()
 		@idOrder = '$id'
 		@nameOrder = ''
