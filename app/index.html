@@ -11,11 +11,11 @@
 	</head>
 	<body ng-app="Ayato">
 		<div>
-			<nav class="container">
+			<nav class="container Niconned">
 				<ul class="left">
 			    	<li ng-show="user"><a ui-sref="boards" class="teal-text">Boards</a></li>
 			 	</ul>
-				<a ng-hide="user" ui-sref="home" class="brand-logo center teal-text Niconned" >
+				<a ng-hide="user" ui-sref="home" class="brand-logo center teal-text" >
 					Ayato
 				</a>
 				<a ng-show="user" ui-sref="boards" class="brand-logo center teal-text" >
@@ -24,7 +24,7 @@
 				<ul class="right">
 			    	<li ng-show="user">
 			    		
-			    		<a ui-sref="settings" class="teal-text"><img ng-show="user.password.profileImageURL" height="35rem" ng-src="{{user.password.profileImageURL}}">{{user.name}}</a>
+			    		<a ui-sref="settings" class="teal-text"><img ng-show="user.password.profileImageURL" height="32rem" ng-src="{{user.password.profileImageURL}}">{{user.name}}</a>
 			    	</li>
 			    	<li ng-hide="user">
 			    		<a ui-sref="signup" class="teal-text">

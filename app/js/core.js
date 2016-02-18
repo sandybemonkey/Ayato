@@ -223,6 +223,28 @@
 
 }).call(this);
 ;(function() {
+  var AppCtrl;
+
+  AppCtrl = (function() {
+    function AppCtrl(Auth, Board, $rootScope, $state) {
+      angular.element(document).ready(function() {
+        return $('.collapsible').collapsible({
+          accordion: false
+        });
+      });
+      if ($rootScope.user) {
+        $state.go('boards');
+      }
+    }
+
+    return AppCtrl;
+
+  })();
+
+  angular.module('App').controller('AppCtrl', AppCtrl);
+
+}).call(this);
+;(function() {
   var Authroute;
 
   Authroute = (function() {
@@ -253,28 +275,6 @@
   })();
 
   angular.module('authModule').config(Authroute);
-
-}).call(this);
-;(function() {
-  var AppCtrl;
-
-  AppCtrl = (function() {
-    function AppCtrl(Auth, Board, $rootScope, $state) {
-      angular.element(document).ready(function() {
-        return $('.collapsible').collapsible({
-          accordion: false
-        });
-      });
-      if ($rootScope.user) {
-        $state.go('boards');
-      }
-    }
-
-    return AppCtrl;
-
-  })();
-
-  angular.module('App').controller('AppCtrl', AppCtrl);
 
 }).call(this);
 ;(function() {
