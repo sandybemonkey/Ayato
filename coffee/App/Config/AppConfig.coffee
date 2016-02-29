@@ -1,7 +1,8 @@
 class AyatoRoute
-	constructor: ($stateProvider, $urlRouterProvider, $locationProvider) ->
+	constructor: ( $stateProvider, $urlRouterProvider, $locationProvider) ->
 		#For any unmatched url, redirect to /
 		$urlRouterProvider.otherwise "/"
+		#$locationProvider.html5Mode true
 
 		$stateProvider
 			.state 'home',
@@ -18,3 +19,4 @@ class AyatoRoute
 angular
 	.module 'Ayato'
 	.config AyatoRoute
+	

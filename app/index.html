@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<title>Ayato</title>
+		<base href="/">
 		<!-------------- stylesheets -------------->
 		<link rel="stylesheet" href="assets/css/animate.css">
 	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
@@ -11,7 +12,7 @@
 	</head>
 	<body ng-app="Ayato">
 		<div>
-			<nav class="container Niconned">
+			<nav class="container Niconned z-depth-5">
 				<ul class="left">
 			    	<li ng-show="user"><a ui-sref="boards" class="teal-text">Boards</a></li>
 			 	</ul>
@@ -64,6 +65,5 @@
     	<script src="libs/angular-materialize/src/angular-materialize.js"></script>
 	    <script src="libs/angular-material/angular-material-mocks.js"></script>
 	    <script src="js/core.js"></script>
-	    
 	</body>
 </html>

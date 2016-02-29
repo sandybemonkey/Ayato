@@ -7,15 +7,21 @@
 
 }).call(this);
 ;(function() {
-  angular.module('boardModule', []);
-
-}).call(this);
-;(function() {
-  angular.module('settingsModule', []);
+  angular.module('boardModule', []).run(["$rootScope", "$location", function($rootScope, $location) {
+    return $rootScope.$on('$routeChangeError', function(event, next, previous, error) {
+      if (error === 'AUTH_REQUIRED') {
+        return $location.path('/home');
+      }
+    });
+  }]);
 
 }).call(this);
 ;(function() {
   angular.module('userModule', []);
+
+}).call(this);
+;(function() {
+  angular.module('settingsModule', []);
 
 }).call(this);
 ;(function() {
@@ -67,6 +73,9 @@
           return err;
         });
       };
+      this.requireAuth = function() {
+        return authObj.$requireAuth();
+      };
 
       /**
        * [logout description]
@@ -76,14 +85,6 @@
         $rootScope.user = {};
         authObj.$unauth();
         return $log.debug(authObj);
-      };
-
-      /**
-       * [requireAuth description]
-       * @return {[type]} [description]
-       */
-      this.requireAuth = function() {
-        return authObj.$requireAuth();
       };
     }
 
@@ -232,9 +233,6 @@
           accordion: false
         });
       });
-      if ($rootScope.user) {
-        $state.go('boards');
-      }
     }
 
     return AppCtrl;
@@ -318,7 +316,7 @@
             controller: "BoardsCtrl",
             controllerAs: "Boards",
             resolve: {
-              "isAuth": function(Auth) {
+              isAuth: function(Auth) {
                 return Auth.requireAuth();
               }
             }
@@ -330,12 +328,15 @@
           'boards': {
             templateUrl: "views/Board/oneBoard.html",
             controller: "BoardCtrl",
-            controllerAs: "Board"
-          }
-        },
-        resolve: {
-          boardData: function(Board, $stateParams) {
-            return Board.getBoard($stateParams.boardId);
+            controllerAs: "Board",
+            resolve: {
+              isAuth: function(Auth) {
+                return Auth.requireAuth;
+              },
+              boardData: function(Board, $stateParams) {
+                return Board.getBoard($stateParams.boardId);
+              }
+            }
           }
         }
       });
@@ -345,17 +346,20 @@
 
   })();
 
-  angular.module('boardModule').config(BoardRoute);
+  angular.module('boardModule').config(BoardRoute).run(["$rootScope", "$location", function($rootScope, $location) {
+    return $rootScope.$on('$routeChangeError', function(event, next, previous, error) {
+      if (error === 'AUTH_REQUIRED') {
+        return $location.path('/');
+      }
+    });
+  }]);
 
 }).call(this);
 ;(function() {
   var BoardCtrl;
 
   BoardCtrl = (function() {
-    function BoardCtrl(Auth, Board, boardData) {
-      angular.element(document).ready(function() {
-        return $('.toolti').tooltip();
-      });
+    function BoardCtrl($state, Auth, Board, boardData, isAuth) {
       this.board = boardData;
       this.toolsOn = false;
       this.showTools = function() {
@@ -370,6 +374,15 @@
       };
       this.tasks = [
         {
+          'assignee': '1',
+          'criteria': 'It tests!',
+          'description': 'This is a test',
+          'id': '1',
+          'reporter': '2',
+          'status': 'To Do',
+          'title': 'First Story',
+          'type': 'Spike'
+        }, {
           'assignee': '1',
           'criteria': 'It tests!',
           'description': 'This is a test',
@@ -409,6 +422,15 @@
           'assignee': '1',
           'criteria': 'It works!',
           'description': 'testing something',
+          'id': '4',
+          'reporter': '2',
+          'status': 'QA Review',
+          'title': 'Third Story',
+          'type': 'Enhancement'
+        }, {
+          'assignee': '1',
+          'criteria': 'It works!',
+          'description': 'testing something',
           'id': '5',
           'reporter': '2',
           'status': 'In Progress',
@@ -420,7 +442,16 @@
           'description': 'testing something',
           'id': '7',
           'reporter': '2',
-          'status': 'To Do',
+          'status': 'Production',
+          'title': 'Third Story',
+          'type': 'Enhancement'
+        }, {
+          'assignee': '1',
+          'criteria': 'It works!',
+          'description': 'testing something',
+          'id': '7',
+          'reporter': '2',
+          'status': 'Down',
           'title': 'Third Story',
           'type': 'Enhancement'
         }
@@ -436,6 +467,10 @@
           name: 'QA Review'
         }, {
           name: 'Verified'
+        }, {
+          name: 'Production'
+        }, {
+          name: 'Down'
         }
       ];
     }
@@ -451,14 +486,16 @@
   var BoardsCtrl;
 
   BoardsCtrl = (function() {
-    function BoardsCtrl(Auth, Board, Users) {
+    function BoardsCtrl($state, $scope, Auth, Board, Users, isAuth) {
       this.createBoard = function(newBoard) {
 
         /*Pushing To Firebase */
         Board.createBoard(newBoard);
 
         /*Reseting Form */
-        return this.newBoard = {};
+        this.newBoard = {};
+        this.owner = '';
+        return $scope.owner = '';
       };
       this.users = Users.getAll();
       this.boards = Board.getAll();

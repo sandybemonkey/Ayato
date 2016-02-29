@@ -10,6 +10,7 @@ class Auth
         userData.provider = data.provider
         userData.password = data.password
         $rootScope.user = userData
+
     
     @login = (user)->
       authObj.$authWithPassword (
@@ -39,7 +40,8 @@ class Auth
       .catch((err)->
         err
       )
-
+    @requireAuth = ->
+      authObj.$requireAuth()
     ###*
      * [logout description]
      * @return {[type]} [description]
@@ -49,12 +51,6 @@ class Auth
       authObj.$unauth()
       $log.debug authObj
 
-    ###*
-     * [requireAuth description]
-     * @return {[type]} [description]
-    ###
-    @requireAuth = ->
-      authObj.$requireAuth()
 
 angular
   .module 'authModule'

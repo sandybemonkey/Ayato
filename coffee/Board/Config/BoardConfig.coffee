@@ -13,8 +13,9 @@ class BoardRoute
 						controller: "BoardsCtrl"
 						controllerAs: "Boards"
 						resolve:
-							"isAuth": (Auth)->
+							isAuth: (Auth)->
 								Auth.requireAuth()
+						
 			.state 'Oneboard',
 				url: "/board/:boardId"
 				views:
@@ -25,12 +26,21 @@ class BoardRoute
 						  #return $templateCache.get "template path"
 						controller: "BoardCtrl"
 						controllerAs: "Board"
-				resolve:
-					boardData: (Board, $stateParams)->
-						Board.getBoard($stateParams.boardId)
+						resolve:
+							isAuth: (Auth)->
+								Auth.requireAuth
+
+							boardData: (Board, $stateParams)->
+								Board.getBoard($stateParams.boardId)
 
 
 
 angular
 	.module 'boardModule'
 	.config BoardRoute
+	.run ($rootScope, $location) ->
+	    $rootScope.$on '$routeChangeError', (event, next, previous, error) ->
+	      # We can catch the error thrown when the $requireAuth promise is rejected
+	      # and redirect the user back to the home page
+	      if error == 'AUTH_REQUIRED'
+	        $location.path '/'

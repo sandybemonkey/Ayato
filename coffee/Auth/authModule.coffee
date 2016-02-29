@@ -1,4 +1,3 @@
 angular
-  .module 'authModule', [
-    
-  ]
+  .module 'authModule', []
+

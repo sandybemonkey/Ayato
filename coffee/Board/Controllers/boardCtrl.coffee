@@ -1,8 +1,5 @@
 class BoardCtrl
-	constructor: (Auth, Board, boardData)->
-		angular.element(document).ready ->
-		    $('.toolti').tooltip()
-		
+	constructor: ($state, Auth, Board, boardData, isAuth)->				
 		@board = boardData
 		@toolsOn = false
 		@showTools = ->
@@ -15,6 +12,16 @@ class BoardCtrl
 			console.log steps
 
 		@tasks = [
+		  {
+		    'assignee': '1'
+		    'criteria': 'It tests!'
+		    'description': 'This is a test'
+		    'id': '1'
+		    'reporter': '2'
+		    'status': 'To Do'
+		    'title': 'First Story'
+		    'type': 'Spike'
+		  }
 		  {
 		    'assignee': '1'
 		    'criteria': 'It tests!'
@@ -54,6 +61,16 @@ class BoardCtrl
 		    'status': 'QA Review'
 		    'title': 'Third Story'
 		    'type': 'Enhancement'
+		  } 
+		  {
+		    'assignee': '1'
+		    'criteria': 'It works!'
+		    'description': 'testing something'
+		    'id': '4'
+		    'reporter': '2'
+		    'status': 'QA Review'
+		    'title': 'Third Story'
+		    'type': 'Enhancement'
 		  }
 		  {
 		    'assignee': '1'
@@ -71,7 +88,17 @@ class BoardCtrl
 		    'description': 'testing something'
 		    'id': '7'
 		    'reporter': '2'
-		    'status': 'To Do'
+		    'status': 'Production'
+		    'title': 'Third Story'
+		    'type': 'Enhancement'
+		  }
+		  {
+		    'assignee': '1'
+		    'criteria': 'It works!'
+		    'description': 'testing something'
+		    'id': '7'
+		    'reporter': '2'
+		    'status': 'Down'
 		    'title': 'Third Story'
 		    'type': 'Enhancement'
 		  }
@@ -83,6 +110,8 @@ class BoardCtrl
 		  { name: 'Code Review' }
 		  { name: 'QA Review' }
 		  { name: 'Verified' }
+		  { name: 'Production' }
+		  { name: 'Down' }
 		]
 angular
 	.module 'boardModule'

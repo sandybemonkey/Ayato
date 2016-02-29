@@ -45,7 +45,7 @@
                     <div class="input-field col s6">
                       <label for="endingDate">Owner</label>
                       <select class="" ng-model="Boards.newBoard.owner" material-select watch>
-                          <option ng-repeat="owner in Boards.users">{{owner.name}}</option>
+                          <option value="{{owner.$id}}" ng-repeat="owner in Boards.users">{{owner.name}}</option>
                       </select>
                     </div>
 
@@ -57,11 +57,10 @@
                     </div>
                     
                     <div class="input-field col s12">
-                      <textarea 
-                        id="description" 
-                        class="materialize-textarea"
-                        ng-model="Boards.newBoard.description"></textarea>
-                      <label for="description">Description</label>
+                      <input-field>
+                          <input type="text" ng-model="Boards.newBoard.description">
+                          <label>Description</label>
+                      </input-field>
                     </div>
                   </div>
                   <center>
@@ -151,47 +150,23 @@
 
 <div class="row" ng-hide="Boards.boards == ''">
   <div class="col s2" ng-repeat="board in Boards.boards | orderBy : Boards.order track by board.$id">
-    <div class="card blue-grey lighten-5">
-      <div class="card-content center-align">
-        <span class="card-title activator grey-text text-darken-4">
-          {{board.name}}
-          <i class="material-icons right">more_vert</i>
-        </span>
-        <p>
-          <strong class="orange-text activator">START</strong> 
-        </p>
-        <p> 
-          {{board.startingDate | date:' dd MMMM yyyy'}}
-        </p>
-        <br>
-        <p>
-          <strong class="green-text activator">END</strong> 
-        </p>
-        <p>
-          {{board.endingDate | date:' dd MMMM yyyy'}}
-        </p>
-      </div>
-      <div class="card-reveal center-align">
-        <span class="card-title grey-text text-darken-4">
-          {{board.name}}
-          <i class="material-icons right">close</i>
-        </span>
-        <p> {{board.description}}</p>
-        <p>
-          <a ui-sref="Oneboard({ boardId: board.$id})"
-            class="btn-floating">
-            <span>
-              <i class="small material-icons">visibility</i>
-            </span>
-          </a>
-          
-          <a class="btn-floating red" 
-            ng-click="Boards.deleteBoard(board)">
-            <span>
-              <i class="small material-icons">delete</i>
-            </span>
-          </a>
-        </p>
+    <div class="row">
+      <div class="col s12 blue-grey darken-4">
+        <div class="card small">
+          <div class="card-image">
+            <img  src="http://flatdesign.im/_ph/8/49749432.png">
+            <span class="card-title blue-grey darken-4-text">{{board.name}}</span>
+          </div>
+          <div class="card-content">
+            <h6>{{board.description}}</h6>
+
+            <p class="right">
+              <i  ui-sref="Oneboard({ boardId: board.$id})" class="small material-icons hoverable">visibility</i>
+              <i ng-click="Boards.deleteBoard(board)" class="small material-icons hoverable">delete</i>
+              </a>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>

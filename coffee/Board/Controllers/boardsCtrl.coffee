@@ -1,11 +1,13 @@
 class BoardsCtrl
-	constructor: (Auth, Board, Users)->
-		
+	constructor: ($state, $scope, Auth, Board, Users, isAuth)->		
 		@createBoard = (newBoard)->			
 			###Pushing To Firebase###
 			Board.createBoard(newBoard)
 			###Reseting Form###
 			@newBoard = {}
+			@owner = ''
+			$scope.owner = ''
+
 			
 		@users = Users.getAll()
 		@boards = Board.getAll()
