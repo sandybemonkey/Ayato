@@ -1,3 +1,6 @@
+input {
+	border-radius: 35px;
+}
 .uk-navbar{
     background-color: #00bfa5;
     color: #fff;

@@ -5,4 +5,5 @@ angular
 		'App'
 		'authModule'
 		'userModule'
+		'boardsModule'
 	]

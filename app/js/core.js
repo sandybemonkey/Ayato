@@ -3,58 +3,19 @@
 
 }).call(this);
 ;(function() {
-  angular.module('userModule', []);
-
-}).call(this);
-;(function() {
   angular.module('authModule', ['ngStorage']);
 
 }).call(this);
 ;(function() {
-  angular.module('authModule').constant('FIREBASE_BDD_URL', 'https://ayatoapp.firebaseio.com/');
+  angular.module('boardsModule', []);
 
 }).call(this);
 ;(function() {
-  var Users;
+  angular.module('userModule', []);
 
-  Users = (function() {
-    function Users($log, $rootScope, FIREBASE_BDD_URL, $firebaseArray) {
-      var usersArray, usersRef;
-      usersRef = new Firebase(FIREBASE_BDD_URL + "/users");
-      usersArray = $firebaseArray(usersRef);
-      this.getAll = function() {
-        return usersArray;
-      };
-      this.getUser = function(id) {
-        return usersArray.$getRecord(id);
-      };
-      this.createUser = function(user) {
-        var newUser;
-        newUser = $firebaseArray(usersRef.child(user.uid));
-        return usersRef.child(user.uid).set(user);
-      };
-      this.updateUser = function(user) {
-        var userInBdd;
-        userInBdd = usersArray.$getRecord(user.$id);
-        if (userInBdd !== '') {
-          userInBdd = user;
-          return usersArray.$save(userInBdd).then(function(ref) {
-            return console.log(ref.key() === userInBdd.$id);
-          });
-        } else {
-          return console.log("Can't find this data");
-        }
-      };
-      this.deleteUser = function(user) {
-        return usersArray.$remove(user);
-      };
-    }
-
-    return Users;
-
-  })();
-
-  angular.module('authModule').service('Users', Users);
+}).call(this);
+;(function() {
+  angular.module('authModule').constant('FIREBASE_BDD_URL', 'https://ayatoapp.firebaseio.com/');
 
 }).call(this);
 ;(function() {
@@ -132,7 +93,80 @@
 
 }).call(this);
 ;(function() {
-  angular.module('Ayato', ['ui.router', 'firebase', 'App', 'authModule', 'userModule']);
+  var Users;
+
+  Users = (function() {
+    function Users($log, $rootScope, FIREBASE_BDD_URL, $firebaseArray) {
+      var usersArray, usersRef;
+      usersRef = new Firebase(FIREBASE_BDD_URL + "/users");
+      usersArray = $firebaseArray(usersRef);
+      this.getAll = function() {
+        return usersArray;
+      };
+      this.getUser = function(id) {
+        return usersArray.$getRecord(id);
+      };
+      this.createUser = function(user) {
+        var newUser;
+        newUser = $firebaseArray(usersRef.child(user.uid));
+        return usersRef.child(user.uid).set(user);
+      };
+      this.updateUser = function(user) {
+        var userInBdd;
+        userInBdd = usersArray.$getRecord(user.$id);
+        if (userInBdd !== '') {
+          userInBdd = user;
+          return usersArray.$save(userInBdd).then(function(ref) {
+            return console.log(ref.key() === userInBdd.$id);
+          });
+        } else {
+          return console.log("Can't find this data");
+        }
+      };
+      this.deleteUser = function(user) {
+        return usersArray.$remove(user);
+      };
+    }
+
+    return Users;
+
+  })();
+
+  angular.module('authModule').service('Users', Users);
+
+}).call(this);
+;(function() {
+  angular.module('Ayato', ['ui.router', 'firebase', 'App', 'authModule', 'userModule', 'boardsModule']);
+
+}).call(this);
+;(function() {
+  var BoardsRoute;
+
+  BoardsRoute = (function() {
+    function BoardsRoute($stateProvider, $urlRouterProvider, $locationProvider) {
+      $urlRouterProvider.otherwise("/");
+      $stateProvider.state('boards', {
+        url: "/boards",
+        views: {
+          'nav': {
+            templateUrl: "views/App/welcome.html",
+            controller: "AppCtrl",
+            controllerAs: "App"
+          },
+          'boards': {
+            templateUrl: "views/Boards/BoardsHome.html",
+            controller: "BoardsCtrl",
+            controllerAs: "Boards"
+          }
+        }
+      });
+    }
+
+    return BoardsRoute;
+
+  })();
+
+  angular.module('boardsModule').config(BoardsRoute);
 
 }).call(this);
 ;(function() {
@@ -144,7 +178,7 @@
       $stateProvider.state('home', {
         url: "/",
         views: {
-          'main': {
+          'nav': {
             templateUrl: "views/App/welcome.html",
             controller: "AppCtrl",
             controllerAs: "App"
@@ -161,24 +195,6 @@
 
 }).call(this);
 ;(function() {
-  var AppCtrl;
-
-  AppCtrl = (function() {
-    function AppCtrl($state, Auth, $rootScope) {
-      this.logout = function() {
-        Auth.logout();
-        return $state.go('login');
-      };
-    }
-
-    return AppCtrl;
-
-  })();
-
-  angular.module('App').controller('AppCtrl', AppCtrl);
-
-}).call(this);
-;(function() {
   var Authroute;
 
   Authroute = (function() {
@@ -186,7 +202,7 @@
       $stateProvider.state('login', {
         url: "/login",
         views: {
-          'main': {
+          'nav': {
             templateUrl: "views/App/welcome.html",
             controller: "AppCtrl",
             controllerAs: "App"
@@ -200,7 +216,7 @@
       }).state('signup', {
         url: "/signup",
         views: {
-          'main': {
+          'nav': {
             templateUrl: "views/App/welcome.html",
             controller: "AppCtrl",
             controllerAs: "App"
@@ -222,6 +238,24 @@
 
 }).call(this);
 ;(function() {
+  var AppCtrl;
+
+  AppCtrl = (function() {
+    function AppCtrl($state, Auth, $rootScope) {
+      this.logout = function() {
+        Auth.logout();
+        return $state.go('login');
+      };
+    }
+
+    return AppCtrl;
+
+  })();
+
+  angular.module('App').controller('AppCtrl', AppCtrl);
+
+}).call(this);
+;(function() {
   var AuthCtrl;
 
   AuthCtrl = (function() {
@@ -231,12 +265,12 @@
       }
       this.login = function(user) {
         return Auth.login(user).then(function(userData) {
-          return $state.go('home');
+          return $state.go('boards');
         });
       };
       this.signup = function(user) {
         return Auth.signup(user).then(function(data) {
-          return $state.go('home');
+          return $state.go('boards');
         });
       };
     }
@@ -246,5 +280,18 @@
   })();
 
   angular.module('authModule').controller('AuthCtrl', AuthCtrl);
+
+}).call(this);
+;(function() {
+  var BoardsCtrl;
+
+  BoardsCtrl = (function() {
+    function BoardsCtrl($log) {}
+
+    return BoardsCtrl;
+
+  })();
+
+  angular.module('boardsModule').controller('BoardsCtrl', BoardsCtrl);
 
 }).call(this);

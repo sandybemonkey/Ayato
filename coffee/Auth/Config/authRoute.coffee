@@ -5,7 +5,7 @@ class Authroute
       .state 'login',
         url: "/login"
         views:
-          'main':
+          'nav':
             #coment to use Template Cache
             templateUrl: "views/App/welcome.html"
             #templateProvider: ($templateCache)->
@@ -21,7 +21,7 @@ class Authroute
       .state 'signup',
         url: "/signup"
         views:
-          'main':
+          'nav':
             #coment to use Template Cache
             templateUrl: "views/App/welcome.html"
             #templateProvider: ($templateCache)->
