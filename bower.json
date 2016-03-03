@@ -18,10 +18,11 @@
     "angular-animate": "*",
     "angularfire": "*",
     "angular": "*",
+    "ngstorage": "*",
+    "angularjs-toaster": "*",
     "angular-messages": "*",
     "angular-mocks": "*",
-    "Materialize": "materialize#^0.97.5",
-    "angular-materialize": "*"
+    "uikit": "*"
   },
   "ignore": [
     "**/.*",
@@ -30,8 +31,5 @@
     "app/libs/",
     "test",
     "tests"
-  ],
-  "resolutions": {
-    "angular": "1.5.0"
-  }
+  ]
 }

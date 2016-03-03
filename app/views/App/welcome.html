@@ -1,4 +1,17 @@
-<div class="welcome center-align flow-text teal-text animated bounceInDown">
-	<h1>Ayato</h1>
-	<h3>A simple, fast & smart way to manage all you want</h3>
-</div>
+<nav class="uk-navbar">
+    <!-- <ul class="uk-navbar-nav">
+        <li class="uk-active"><a href="">Active</a></li>
+        <li class="uk-hidden-small"><a href="">Item</a></li>
+    </ul> -->
+    <div class="uk-navbar-flip">
+
+        <ul class="uk-navbar-nav">
+            <li ng-hide="user"><a ui-sref="signup">SignUp</a></li>
+            <li ng-hide="user"><a ui-sref="login">LogIn</a></li>
+            <li ng-show="user"><a ng-click="App.logout()">Logout</a></li>
+        </ul>
+
+    </div>
+    <div class="uk-navbar-content uk-navbar-center">Ayato</div>
+</nav>
+

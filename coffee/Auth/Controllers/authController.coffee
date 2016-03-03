@@ -1,20 +1,19 @@
 class AuthCtrl
-  constructor: ($log, $state, Auth) ->
+  constructor: ($rootScope, $log, $state, Auth) ->
+    if $rootScope.user
+      $state.go 'home'
+    
     @login = (user)->
       Auth
       .login user
       .then (userData)->
-        $state.go 'boards'
+        $state.go 'home'
     
     @signup = (user)->
       Auth
         .signup(user)
         .then (data)->
-            $state.go 'boards'
-
-    @logOut =->
-      Auth.logout()
-      $state.go 'login'
+            $state.go 'home'
 
 angular
   .module 'authModule'

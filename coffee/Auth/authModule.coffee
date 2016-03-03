@@ -1,3 +1,5 @@
 angular
-  .module 'authModule', []
+  .module 'authModule', [
+  	'ngStorage'
+  ]
 

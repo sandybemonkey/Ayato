@@ -1,8 +1,8 @@
 class AppCtrl
-	constructor: (Auth, Board, $rootScope, $state)->
-		angular.element(document).ready ->
-			$('.collapsible').collapsible
-			    accordion : false		
+	constructor: ($state, Auth, $rootScope)->
+		@logout =->
+			Auth.logout()
+			$state.go 'login'
 
 angular
 	.module 'App'

@@ -1,16 +1,27 @@
 class Auth
 
-  constructor: ($log, $rootScope, FIREBASE_BDD_URL, $firebaseAuth, Users) ->
+  constructor: ($log, $sessionStorage, $rootScope, FIREBASE_BDD_URL, $firebaseAuth, Users) ->
     ref = new Firebase FIREBASE_BDD_URL
     authObj = $firebaseAuth ref
     
-    authObj.$onAuth (data)->
+    setUserAuthInfo = (data)->
       if data
         userData = Users.getUser data.uid
-        userData.provider = data.provider
-        userData.password = data.password
-        $rootScope.user = userData
-
+        
+        if userData
+          userData.provider = data.provider
+          userData.password = data.password
+          $rootScope.user = userData
+          $sessionStorage.userSession = userData
+        else
+          console.log 'your are logout'
+    
+    authObj.$onAuth (data)->
+      if $sessionStorage.userSession
+        $rootScope.user = $sessionStorage.userSession
+      else
+        setUserAuthInfo data
+    
     
     @login = (user)->
       authObj.$authWithPassword (
@@ -42,14 +53,13 @@ class Auth
       )
     @requireAuth = ->
       authObj.$requireAuth()
-    ###*
-     * [logout description]
-     * @return {[type]} [description]
-    ###
+    
+
     @logout = ->
-      $rootScope.user = {}
+      delete $rootScope.user
+      delete $sessionStorage.userSession
       authObj.$unauth()
-      $log.debug authObj
+      
 
 
 angular

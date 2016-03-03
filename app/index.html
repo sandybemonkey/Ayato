@@ -5,65 +5,26 @@
 		<base href="/">
 		<!-------------- stylesheets -------------->
 		<link rel="stylesheet" href="assets/css/animate.css">
-	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
-    	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	    
-	    <link rel="stylesheet" href="assets/css/app.css">
+		
+		<link rel="stylesheet" href="libs/uikit/css/uikit.almost-flat.css">
+		<link rel="stylesheet" href="assets/css/app.css">
 	</head>
 	<body ng-app="Ayato">
-		<div>
-			<nav class="container Niconned z-depth-5">
-				<ul class="left">
-			    	<li ng-show="user"><a ui-sref="boards" class="teal-text">Boards</a></li>
-			 	</ul>
-				<a ng-hide="user" ui-sref="home" class="brand-logo center teal-text" >
-					Ayato
-				</a>
-				<a ng-show="user" ui-sref="boards" class="brand-logo center teal-text" >
-					Ayato
-				</a>
-				<ul class="right">
-			    	<li ng-show="user">
-			    		
-			    		<a ui-sref="settings" class="teal-text"><img ng-show="user.password.profileImageURL" height="32rem" ng-src="{{user.password.profileImageURL}}">{{user.name}}</a>
-			    	</li>
-			    	<li ng-hide="user">
-			    		<a ui-sref="signup" class="teal-text">
-							Sign Up
-						</a>
-			    	</li>
-			    	<li>
-			    		<a ng-show="user" class="teal-text"
-			    			ng-controller="AuthCtrl as Auth"
-							ng-click="Auth.logOut()">
-							Logout
-						</a>
-						<a ng-hide="user" ui-sref="login" class="teal-text">
-							Login
-						</a>
-			    	</li>
-			 	</ul>
-				<!--  -->
-			</nav>
-			<div ui-view="main" class="animated bounceInDown"></div>
-			
-			<!-- main Content: Boards List -->
-			<div ui-view="boards" class="animated bounceInDown"></div>   
-		</div>
-        
-
+		<div ui-view="main" class="animated bounceInDown"></div>
+		<div ui-view="content" class="animated bounceInDown"></div>
+		
+		<!-------------- scripts -------------->
 		<script src="libs/jquery/dist/jquery.js"></script>
 	    <script src="libs/angular/angular.js"></script>
 	    <script src="libs/angular-mocks/angular-mocks.js"></script>
+	    <script src="libs/ngstorage/ngStorage.js"></script>
 	    <script src="libs/firebase/firebase.js"></script>
 	    <script src="libs/angularfire/dist/angularfire.min.js"></script>
 	    <script src="libs/angular-animate/angular-animate.js"></script>
 	    <script src="libs/angular-ui-router/release/angular-ui-router.js"></script>
 	    <script src="libs/angular-aria/angular-aria.js"></script>
 	    <script src="libs/angular-messages/angular-messages.js"></script>
-    	<script src="libs/Materialize/dist/js/materialize.js"></script>
-    	<script src="libs/angular-materialize/src/angular-materialize.js"></script>
-	    <script src="libs/angular-material/angular-material-mocks.js"></script>
+	    <script src="libs/uikit/js/uikit.js"></script>
 	    <script src="js/core.js"></script>
 	</body>
 </html>

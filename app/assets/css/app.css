@@ -1,97 +1,15 @@
-@import url(https://fonts.googleapis.com/css?family=Niconne);
-html {
-    line-height: 0; 
-}
-body{
-  background-color: #bdbdbd ;
-}
-
-nav {
-    color: #fff;
-    background-color: #263238;
-}
-
-nav ul a {
-    font-size: 1.9rem;
-}
-
-h1 { 
-    font-family: 'Niconne', cursive; 
-    font-weight: 400; 
-}
-
-nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
-    height: 40px;
-    line-height: 35px;
-}
-nav .brand-logo{
-    font-size: 2.8rem;
-}
-
-
-.collapsible-body p {
-    margin: 0;
-    padding: 0.5rem; */
-}
-.newBoard{
-    width: 23rem;
-}
-.newBoard form{
-    background-color: #fff;
-}
-.card {
-    position: relative;
-    margin: 0.7rem 0.7rem 0.7rem 0.7rem;
-    background-color: #eceff1;
-}
-.welcome{
-    margin-top: 7rem
-}
-.welcome h1{
-    font-size: 15rem
-}
-.welcome h3{
-    margin-top: 7rem;
-    font-family: 'Niconne', cursive;
-    font-size: 4rem;
-    font-weight: 400; 
-}
-.oneBordTitle{
-    font-family: 'Niconne', cursive;
-    font-size: 40px;
-}
-
-
-.activator {
-    cursor: pointer;
-}
-
-.side-nav {
-    background-color: #fafafa;
-}
-.side-nav a {
+.uk-navbar{
+    background-color: #00bfa5;
     color: #fff;
 }
-
-.btn, .btn-large {
-    background-color: #ff6f00;
+.uk-navbar-nav > li > a {
+    color: #fff;
+    font-size: 1.3rem;
 }
-
-.input-field .prefix ~ input, .input-field .prefix ~ textarea {
-    margin-left: 3rem;
-    width: calc(50% - 3rem);
-    text-align: center;
+.uk-navbar-center{
+    font-size: 3rem;
 }
-
-.Niconned { 
-	font-family: 'Niconne', cursive; 
-	font-weight: 400;
-}
-
-.cardRevealMenu a {
-    color: #000;
-}
-
-#newProjectBtn{
-    margin-top: 1rem;
+.uk-button-success{
+    background-color: #00bfa5;
+    color: #fff;
 }
