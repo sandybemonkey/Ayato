@@ -181,7 +181,7 @@
 
 }).call(this);
 ;(function() {
-  angular.module('Ayato', ['ui.router', 'firebase', 'App', 'authModule', 'userModule']);
+  angular.module('Ayato', ['ui.router', 'firebase', 'angular-sortable-view', 'App', 'authModule', 'userModule', 'boardsModule']);
 
 }).call(this);
 ;(function() {
@@ -237,31 +237,6 @@
       $stateProvider.state('home', {
         url: "/",
         views: {
-          'main': {
-            templateUrl: "views/App/welcome.html",
-            controller: "AppCtrl",
-            controllerAs: "App"
-          }
-        }
-      });
-    }
-
-    return AyatoRoute;
-
-  })();
-
-  angular.module('Ayato').config(AyatoRoute);
-
-}).call(this);
-;(function() {
-  var AyatoRoute;
-
-  AyatoRoute = (function() {
-    function AyatoRoute($stateProvider, $urlRouterProvider, $locationProvider) {
-      $urlRouterProvider.otherwise("/");
-      $stateProvider.state('home', {
-        url: "/",
-        views: {
           'nav': {
             templateUrl: "views/App/welcome.html",
             controller: "AppCtrl",
@@ -304,7 +279,7 @@
       $stateProvider.state('login', {
         url: "/login",
         views: {
-          'main': {
+          'nav': {
             templateUrl: "views/App/welcome.html",
             controller: "AppCtrl",
             controllerAs: "App"
@@ -318,7 +293,7 @@
       }).state('signup', {
         url: "/signup",
         views: {
-          'main': {
+          'nav': {
             templateUrl: "views/App/welcome.html",
             controller: "AppCtrl",
             controllerAs: "App"
@@ -349,12 +324,12 @@
       }
       this.login = function(user) {
         return Auth.login(user).then(function(userData) {
-          return $state.go('home');
+          return $state.go('boards');
         });
       };
       this.signup = function(user) {
         return Auth.signup(user).then(function(data) {
-          return $state.go('home');
+          return $state.go('boards');
         });
       };
     }
