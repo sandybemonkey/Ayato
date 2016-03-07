@@ -22,7 +22,8 @@
     "angularjs-toaster": "*",
     "angular-messages": "*",
     "angular-mocks": "*",
-    "uikit": "*"
+    "uikit": "*",
+    "angular-sortable-view": "^0.0.15"
   },
   "ignore": [
     "**/.*",

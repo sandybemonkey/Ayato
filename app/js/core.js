@@ -19,6 +19,51 @@
 
 }).call(this);
 ;(function() {
+  var Boards;
+
+  Boards = (function() {
+    function Boards($log, $rootScope, FIREBASE_BDD_URL, $firebaseArray) {
+      var boardsArray, boardsRef;
+      boardsRef = new Firebase(FIREBASE_BDD_URL + "/boards");
+      boardsArray = $firebaseArray(boardsRef);
+      this.getAll = function() {
+        return boardsArray;
+      };
+      this.getUser = function(id) {
+        return boardsArray.$getRecord(id);
+      };
+      this.createBoard = function(board) {
+        return boardsArray.$add(board).then(function(ref) {
+          var id;
+          id = ref.key();
+          return console.log(id);
+        });
+      };
+      this.updateUser = function(board) {
+        var boardInBdd;
+        boardInBdd = boardsArray.$getRecord(board.$id);
+        if (boardInBdd !== '') {
+          boardInBdd = board;
+          return boardsArray.$save(boardInBdd).then(function(ref) {
+            return console.log(ref.key() === boardInBdd.$id);
+          });
+        } else {
+          return console.log("Can't find this data");
+        }
+      };
+      this.deleteUser = function(board) {
+        return boardsArray.$remove(board);
+      };
+    }
+
+    return Boards;
+
+  })();
+
+  angular.module('boardsModule').service('Boards', Boards);
+
+}).call(this);
+;(function() {
   var Auth;
 
   Auth = (function() {
@@ -136,7 +181,7 @@
 
 }).call(this);
 ;(function() {
-  angular.module('Ayato', ['ui.router', 'firebase', 'App', 'authModule', 'userModule', 'boardsModule']);
+  angular.module('Ayato', ['ui.router', 'firebase', 'angular-sortable-view', 'App', 'authModule', 'userModule', 'boardsModule']);
 
 }).call(this);
 ;(function() {
@@ -155,6 +200,20 @@
           },
           'boards': {
             templateUrl: "views/Boards/BoardsHome.html",
+            controller: "BoardsCtrl",
+            controllerAs: "Boards"
+          }
+        }
+      }).state('boardsDetails', {
+        url: "/boards/:boardId",
+        views: {
+          'nav': {
+            templateUrl: "views/App/welcome.html",
+            controller: "AppCtrl",
+            controllerAs: "App"
+          },
+          'boards': {
+            templateUrl: "views/Boards/board.html",
             controller: "BoardsCtrl",
             controllerAs: "Boards"
           }
@@ -192,6 +251,24 @@
   })();
 
   angular.module('Ayato').config(AyatoRoute);
+
+}).call(this);
+;(function() {
+  var AppCtrl;
+
+  AppCtrl = (function() {
+    function AppCtrl($state, Auth, $rootScope) {
+      this.logout = function() {
+        Auth.logout();
+        return $state.go('login');
+      };
+    }
+
+    return AppCtrl;
+
+  })();
+
+  angular.module('App').controller('AppCtrl', AppCtrl);
 
 }).call(this);
 ;(function() {
@@ -238,24 +315,6 @@
 
 }).call(this);
 ;(function() {
-  var AppCtrl;
-
-  AppCtrl = (function() {
-    function AppCtrl($state, Auth, $rootScope) {
-      this.logout = function() {
-        Auth.logout();
-        return $state.go('login');
-      };
-    }
-
-    return AppCtrl;
-
-  })();
-
-  angular.module('App').controller('AppCtrl', AppCtrl);
-
-}).call(this);
-;(function() {
   var AuthCtrl;
 
   AuthCtrl = (function() {
@@ -286,7 +345,77 @@
   var BoardsCtrl;
 
   BoardsCtrl = (function() {
-    function BoardsCtrl($log) {}
+    function BoardsCtrl($log, Boards) {
+      this.boardsList = Boards.getAll();
+      this.createBoard = function(newBoard) {
+        return Boards.createBoard(newBoard);
+      };
+      this.rawScreens = [
+        [
+          {
+            icon: './img/icons/facebook.jpg',
+            title: 'Facebook (a)',
+            link: 'http://www.facebook.com'
+          }, {
+            icon: './img/icons/youtube.jpg',
+            title: 'Youtube (a)',
+            link: 'http://www.youtube.com'
+          }, {
+            icon: './img/icons/gmail.jpg',
+            title: 'Gmail (a)',
+            link: 'http://www.gmail.com'
+          }, {
+            icon: './img/icons/google+.jpg',
+            title: 'Google+ (a)',
+            link: 'http://plus.google.com'
+          }, {
+            icon: './img/icons/twitter.jpg',
+            title: 'Twitter (a)',
+            link: 'http://www.twitter.com'
+          }, {
+            icon: './img/icons/yahoomail.jpg',
+            title: 'Yahoo Mail (a)',
+            link: 'http://mail.yahoo.com'
+          }, {
+            icon: './img/icons/pinterest.jpg',
+            title: 'Pinterest (a)',
+            link: 'http://www.pinterest.com'
+          }
+        ], [
+          {
+            icon: './img/icons/facebook.jpg',
+            title: 'Facebook (b)',
+            link: 'http://www.facebook.com'
+          }, {
+            icon: './img/icons/youtube.jpg',
+            title: 'Youtube (b)',
+            link: 'http://www.youtube.com'
+          }, {
+            icon: './img/icons/gmail.jpg',
+            title: 'Gmail (b)',
+            link: 'http://www.gmail.com'
+          }, {
+            icon: './img/icons/google+.jpg',
+            title: 'Google+ (b)',
+            link: 'http://plus.google.com'
+          }, {
+            icon: './img/icons/twitter.jpg',
+            title: 'Twitter (b)',
+            link: 'http://www.twitter.com'
+          }, {
+            icon: './img/icons/yahoomail.jpg',
+            title: 'Yahoo Mail (b)',
+            link: 'http://mail.yahoo.com'
+          }, {
+            icon: './img/icons/pinterest.jpg',
+            title: 'Pinterest (b)',
+            link: 'http://www.pinterest.com'
+          }
+        ]
+      ];
+      this.list1 = this.rawScreens[0];
+      this.list2 = this.rawScreens[1];
+    }
 
     return BoardsCtrl;
 
