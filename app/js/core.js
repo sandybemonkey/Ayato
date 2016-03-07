@@ -3,11 +3,15 @@
 
 }).call(this);
 ;(function() {
-  angular.module('userModule', []);
+  angular.module('authModule', ['ngStorage']);
 
 }).call(this);
 ;(function() {
-  angular.module('authModule', ['ngStorage']);
+  angular.module('boardsModule', []);
+
+}).call(this);
+;(function() {
+  angular.module('userModule', []);
 
 }).call(this);
 ;(function() {
@@ -15,46 +19,48 @@
 
 }).call(this);
 ;(function() {
-  var Users;
+  var Boards;
 
-  Users = (function() {
-    function Users($log, $rootScope, FIREBASE_BDD_URL, $firebaseArray) {
-      var usersArray, usersRef;
-      usersRef = new Firebase(FIREBASE_BDD_URL + "/users");
-      usersArray = $firebaseArray(usersRef);
+  Boards = (function() {
+    function Boards($log, $rootScope, FIREBASE_BDD_URL, $firebaseArray) {
+      var boardsArray, boardsRef;
+      boardsRef = new Firebase(FIREBASE_BDD_URL + "/boards");
+      boardsArray = $firebaseArray(boardsRef);
       this.getAll = function() {
-        return usersArray;
+        return boardsArray;
       };
       this.getUser = function(id) {
-        return usersArray.$getRecord(id);
+        return boardsArray.$getRecord(id);
       };
-      this.createUser = function(user) {
-        var newUser;
-        newUser = $firebaseArray(usersRef.child(user.uid));
-        return usersRef.child(user.uid).set(user);
+      this.createBoard = function(board) {
+        return boardsArray.$add(board).then(function(ref) {
+          var id;
+          id = ref.key();
+          return console.log(id);
+        });
       };
-      this.updateUser = function(user) {
-        var userInBdd;
-        userInBdd = usersArray.$getRecord(user.$id);
-        if (userInBdd !== '') {
-          userInBdd = user;
-          return usersArray.$save(userInBdd).then(function(ref) {
-            return console.log(ref.key() === userInBdd.$id);
+      this.updateUser = function(board) {
+        var boardInBdd;
+        boardInBdd = boardsArray.$getRecord(board.$id);
+        if (boardInBdd !== '') {
+          boardInBdd = board;
+          return boardsArray.$save(boardInBdd).then(function(ref) {
+            return console.log(ref.key() === boardInBdd.$id);
           });
         } else {
           return console.log("Can't find this data");
         }
       };
-      this.deleteUser = function(user) {
-        return usersArray.$remove(user);
+      this.deleteUser = function(board) {
+        return boardsArray.$remove(board);
       };
     }
 
-    return Users;
+    return Boards;
 
   })();
 
-  angular.module('authModule').service('Users', Users);
+  angular.module('boardsModule').service('Boards', Boards);
 
 }).call(this);
 ;(function() {
@@ -132,7 +138,94 @@
 
 }).call(this);
 ;(function() {
+  var Users;
+
+  Users = (function() {
+    function Users($log, $rootScope, FIREBASE_BDD_URL, $firebaseArray) {
+      var usersArray, usersRef;
+      usersRef = new Firebase(FIREBASE_BDD_URL + "/users");
+      usersArray = $firebaseArray(usersRef);
+      this.getAll = function() {
+        return usersArray;
+      };
+      this.getUser = function(id) {
+        return usersArray.$getRecord(id);
+      };
+      this.createUser = function(user) {
+        var newUser;
+        newUser = $firebaseArray(usersRef.child(user.uid));
+        return usersRef.child(user.uid).set(user);
+      };
+      this.updateUser = function(user) {
+        var userInBdd;
+        userInBdd = usersArray.$getRecord(user.$id);
+        if (userInBdd !== '') {
+          userInBdd = user;
+          return usersArray.$save(userInBdd).then(function(ref) {
+            return console.log(ref.key() === userInBdd.$id);
+          });
+        } else {
+          return console.log("Can't find this data");
+        }
+      };
+      this.deleteUser = function(user) {
+        return usersArray.$remove(user);
+      };
+    }
+
+    return Users;
+
+  })();
+
+  angular.module('authModule').service('Users', Users);
+
+}).call(this);
+;(function() {
   angular.module('Ayato', ['ui.router', 'firebase', 'App', 'authModule', 'userModule']);
+
+}).call(this);
+;(function() {
+  var BoardsRoute;
+
+  BoardsRoute = (function() {
+    function BoardsRoute($stateProvider, $urlRouterProvider, $locationProvider) {
+      $urlRouterProvider.otherwise("/");
+      $stateProvider.state('boards', {
+        url: "/boards",
+        views: {
+          'nav': {
+            templateUrl: "views/App/welcome.html",
+            controller: "AppCtrl",
+            controllerAs: "App"
+          },
+          'boards': {
+            templateUrl: "views/Boards/BoardsHome.html",
+            controller: "BoardsCtrl",
+            controllerAs: "Boards"
+          }
+        }
+      }).state('boardsDetails', {
+        url: "/boards/:boardId",
+        views: {
+          'nav': {
+            templateUrl: "views/App/welcome.html",
+            controller: "AppCtrl",
+            controllerAs: "App"
+          },
+          'boards': {
+            templateUrl: "views/Boards/board.html",
+            controller: "BoardsCtrl",
+            controllerAs: "Boards"
+          }
+        }
+      });
+    }
+
+    return BoardsRoute;
+
+  })();
+
+  angular.module('boardsModule').config(BoardsRoute);
 
 }).call(this);
 ;(function() {
@@ -145,6 +238,31 @@
         url: "/",
         views: {
           'main': {
+            templateUrl: "views/App/welcome.html",
+            controller: "AppCtrl",
+            controllerAs: "App"
+          }
+        }
+      });
+    }
+
+    return AyatoRoute;
+
+  })();
+
+  angular.module('Ayato').config(AyatoRoute);
+
+}).call(this);
+;(function() {
+  var AyatoRoute;
+
+  AyatoRoute = (function() {
+    function AyatoRoute($stateProvider, $urlRouterProvider, $locationProvider) {
+      $urlRouterProvider.otherwise("/");
+      $stateProvider.state('home', {
+        url: "/",
+        views: {
+          'nav': {
             templateUrl: "views/App/welcome.html",
             controller: "AppCtrl",
             controllerAs: "App"
@@ -246,5 +364,88 @@
   })();
 
   angular.module('authModule').controller('AuthCtrl', AuthCtrl);
+
+}).call(this);
+;(function() {
+  var BoardsCtrl;
+
+  BoardsCtrl = (function() {
+    function BoardsCtrl($log, Boards) {
+      this.boardsList = Boards.getAll();
+      this.createBoard = function(newBoard) {
+        return Boards.createBoard(newBoard);
+      };
+      this.rawScreens = [
+        [
+          {
+            icon: './img/icons/facebook.jpg',
+            title: 'Facebook (a)',
+            link: 'http://www.facebook.com'
+          }, {
+            icon: './img/icons/youtube.jpg',
+            title: 'Youtube (a)',
+            link: 'http://www.youtube.com'
+          }, {
+            icon: './img/icons/gmail.jpg',
+            title: 'Gmail (a)',
+            link: 'http://www.gmail.com'
+          }, {
+            icon: './img/icons/google+.jpg',
+            title: 'Google+ (a)',
+            link: 'http://plus.google.com'
+          }, {
+            icon: './img/icons/twitter.jpg',
+            title: 'Twitter (a)',
+            link: 'http://www.twitter.com'
+          }, {
+            icon: './img/icons/yahoomail.jpg',
+            title: 'Yahoo Mail (a)',
+            link: 'http://mail.yahoo.com'
+          }, {
+            icon: './img/icons/pinterest.jpg',
+            title: 'Pinterest (a)',
+            link: 'http://www.pinterest.com'
+          }
+        ], [
+          {
+            icon: './img/icons/facebook.jpg',
+            title: 'Facebook (b)',
+            link: 'http://www.facebook.com'
+          }, {
+            icon: './img/icons/youtube.jpg',
+            title: 'Youtube (b)',
+            link: 'http://www.youtube.com'
+          }, {
+            icon: './img/icons/gmail.jpg',
+            title: 'Gmail (b)',
+            link: 'http://www.gmail.com'
+          }, {
+            icon: './img/icons/google+.jpg',
+            title: 'Google+ (b)',
+            link: 'http://plus.google.com'
+          }, {
+            icon: './img/icons/twitter.jpg',
+            title: 'Twitter (b)',
+            link: 'http://www.twitter.com'
+          }, {
+            icon: './img/icons/yahoomail.jpg',
+            title: 'Yahoo Mail (b)',
+            link: 'http://mail.yahoo.com'
+          }, {
+            icon: './img/icons/pinterest.jpg',
+            title: 'Pinterest (b)',
+            link: 'http://www.pinterest.com'
+          }
+        ]
+      ];
+      this.list1 = this.rawScreens[0];
+      this.list2 = this.rawScreens[1];
+    }
+
+    return BoardsCtrl;
+
+  })();
+
+  angular.module('boardsModule').controller('BoardsCtrl', BoardsCtrl);
 
 }).call(this);
