@@ -7,13 +7,13 @@ class AuthCtrl
       Auth
       .login user
       .then (userData)->
-        $state.go 'home'
+        $state.go 'boards'
     
     @signup = (user)->
       Auth
         .signup(user)
         .then (data)->
-            $state.go 'home'
+            $state.go 'boards'
 
 angular
   .module 'authModule'
