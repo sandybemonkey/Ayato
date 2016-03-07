@@ -340,6 +340,33 @@
 
 }).call(this);
 ;(function() {
+  var AuthCtrl;
+
+  AuthCtrl = (function() {
+    function AuthCtrl($rootScope, $log, $state, Auth) {
+      if ($rootScope.user) {
+        $state.go('home');
+      }
+      this.login = function(user) {
+        return Auth.login(user).then(function(userData) {
+          return $state.go('home');
+        });
+      };
+      this.signup = function(user) {
+        return Auth.signup(user).then(function(data) {
+          return $state.go('home');
+        });
+      };
+    }
+
+    return AuthCtrl;
+
+  })();
+
+  angular.module('authModule').controller('AuthCtrl', AuthCtrl);
+
+}).call(this);
+;(function() {
   var BoardsCtrl;
 
   BoardsCtrl = (function() {
@@ -420,32 +447,5 @@
   })();
 
   angular.module('boardsModule').controller('BoardsCtrl', BoardsCtrl);
-
-}).call(this);
-;(function() {
-  var AuthCtrl;
-
-  AuthCtrl = (function() {
-    function AuthCtrl($rootScope, $log, $state, Auth) {
-      if ($rootScope.user) {
-        $state.go('home');
-      }
-      this.login = function(user) {
-        return Auth.login(user).then(function(userData) {
-          return $state.go('home');
-        });
-      };
-      this.signup = function(user) {
-        return Auth.signup(user).then(function(data) {
-          return $state.go('home');
-        });
-      };
-    }
-
-    return AuthCtrl;
-
-  })();
-
-  angular.module('authModule').controller('AuthCtrl', AuthCtrl);
 
 }).call(this);
