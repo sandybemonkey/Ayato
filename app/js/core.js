@@ -349,7 +349,11 @@
       this.boardsList = Boards.getAll();
       this.menu = function(d) {
         UIkit.offcanvas.show('#rightBar');
-        return console.log(d);
+        return console.log(d.listName);
+      };
+      this.newList = function() {
+        UIkit.offcanvas.show('#newListForm');
+        return console.log(newList);
       };
       this.createBoard = function(newBoard) {
         return Boards.createBoard(newBoard);
@@ -363,7 +367,7 @@
             'id': '1',
             'reporter': '2',
             'status': 'To Do',
-            'title': 'First Story',
+            'title': 'First Story_a',
             'type': 'Spike'
           }, {
             'assignee': '2',
@@ -372,7 +376,7 @@
             'id': '2',
             'reporter': '1',
             'status': 'In Progress',
-            'title': 'Second Story',
+            'title': 'Second Story_a',
             'type': 'Enhancement'
           }
         ], [
@@ -383,7 +387,7 @@
             'id': '1',
             'reporter': '2',
             'status': 'To Do',
-            'title': 'First Story',
+            'title': 'First Story_b',
             'type': 'Spike'
           }, {
             'assignee': '2',
@@ -392,87 +396,7 @@
             'id': '2',
             'reporter': '1',
             'status': 'In Progress',
-            'title': 'Second Story',
-            'type': 'Enhancement'
-          }
-        ], [
-          {
-            'assignee': '1',
-            'criteria': 'It tests!',
-            'description': 'This is a test',
-            'id': '1',
-            'reporter': '2',
-            'status': 'To Do',
-            'title': 'First Story',
-            'type': 'Spike'
-          }, {
-            'assignee': '2',
-            'criteria': 'It works!',
-            'description': 'testing something',
-            'id': '2',
-            'reporter': '1',
-            'status': 'In Progress',
-            'title': 'Second Story',
-            'type': 'Enhancement'
-          }
-        ], [
-          {
-            'assignee': '1',
-            'criteria': 'It tests!',
-            'description': 'This is a test',
-            'id': '1',
-            'reporter': '2',
-            'status': 'To Do',
-            'title': 'First Story',
-            'type': 'Spike'
-          }, {
-            'assignee': '2',
-            'criteria': 'It works!',
-            'description': 'testing something',
-            'id': '2',
-            'reporter': '1',
-            'status': 'In Progress',
-            'title': 'Second Story',
-            'type': 'Enhancement'
-          }
-        ], [
-          {
-            'assignee': '1',
-            'criteria': 'It tests!',
-            'description': 'This is a test',
-            'id': '1',
-            'reporter': '2',
-            'status': 'To Do',
-            'title': 'First Story',
-            'type': 'Spike'
-          }, {
-            'assignee': '2',
-            'criteria': 'It works!',
-            'description': 'testing something',
-            'id': '2',
-            'reporter': '1',
-            'status': 'In Progress',
-            'title': 'Second Story',
-            'type': 'Enhancement'
-          }
-        ], [
-          {
-            'assignee': '1',
-            'criteria': 'It tests!',
-            'description': 'This is a test',
-            'id': '1',
-            'reporter': '2',
-            'status': 'To Do',
-            'title': 'First Story',
-            'type': 'Spike'
-          }, {
-            'assignee': '2',
-            'criteria': 'It works!',
-            'description': 'testing something',
-            'id': '2',
-            'reporter': '1',
-            'status': 'In Progress',
-            'title': 'Second Story',
+            'title': 'Second Story_b',
             'type': 'Enhancement'
           }
         ]
