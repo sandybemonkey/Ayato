@@ -19,51 +19,6 @@
 
 }).call(this);
 ;(function() {
-  var Boards;
-
-  Boards = (function() {
-    function Boards($log, $rootScope, FIREBASE_BDD_URL, $firebaseArray) {
-      var boardsArray, boardsRef;
-      boardsRef = new Firebase(FIREBASE_BDD_URL + "/boards");
-      boardsArray = $firebaseArray(boardsRef);
-      this.getAll = function() {
-        return boardsArray;
-      };
-      this.getUser = function(id) {
-        return boardsArray.$getRecord(id);
-      };
-      this.createBoard = function(board) {
-        return boardsArray.$add(board).then(function(ref) {
-          var id;
-          id = ref.key();
-          return console.log(id);
-        });
-      };
-      this.updateUser = function(board) {
-        var boardInBdd;
-        boardInBdd = boardsArray.$getRecord(board.$id);
-        if (boardInBdd !== '') {
-          boardInBdd = board;
-          return boardsArray.$save(boardInBdd).then(function(ref) {
-            return console.log(ref.key() === boardInBdd.$id);
-          });
-        } else {
-          return console.log("Can't find this data");
-        }
-      };
-      this.deleteUser = function(board) {
-        return boardsArray.$remove(board);
-      };
-    }
-
-    return Boards;
-
-  })();
-
-  angular.module('boardsModule').service('Boards', Boards);
-
-}).call(this);
-;(function() {
   var Auth;
 
   Auth = (function() {
@@ -135,6 +90,138 @@
   })();
 
   angular.module('authModule').service('Auth', Auth);
+
+}).call(this);
+;(function() {
+  var Boards;
+
+  Boards = (function() {
+    function Boards($log, $rootScope, FIREBASE_BDD_URL, $firebaseArray) {
+      var boardsArray, boardsRef;
+      boardsRef = new Firebase(FIREBASE_BDD_URL + "/boards");
+      boardsArray = $firebaseArray(boardsRef);
+      this.getAll = function() {
+        return boardsArray;
+      };
+      this.getBoard = function(id) {
+        return boardsArray.$getRecord(id);
+      };
+      this.createBoard = function(board) {
+        return boardsArray.$add(board).then(function(ref) {
+          var id;
+          id = ref.key();
+          return console.log(id);
+        });
+      };
+      this.updateBoard = function(board) {
+        var boardInBdd;
+        boardInBdd = boardsArray.$getRecord(board.$id);
+        if (boardInBdd !== '') {
+          boardInBdd = board;
+          return boardsArray.$save(boardInBdd).then(function(ref) {
+            return console.log(ref.key() === boardInBdd.$id);
+          });
+        } else {
+          return console.log("Can't find this data");
+        }
+      };
+      this.deleteBoard = function(board) {
+        return boardsArray.$remove(board);
+      };
+    }
+
+    return Boards;
+
+  })();
+
+  angular.module('boardsModule').service('Boards', Boards);
+
+}).call(this);
+;(function() {
+  var Cards;
+
+  Cards = (function() {
+    function Cards($log, $rootScope, $stateParams, FIREBASE_BDD_URL, $firebaseArray, Boards) {
+      this.boardId = $stateParams.boardId;
+      this.createCard = function(card, listId) {
+        var board, i, l, len, ref;
+        console.log(card);
+        console.log(listId);
+        board = Boards.getBoard($stateParams.boardId);
+        if (board.list) {
+          ref = board.list;
+          for (i = 0, len = ref.length; i < len; i++) {
+            l = ref[i];
+            if (l.name === listId) {
+              if (l.cards) {
+                l.cards.push(card);
+              } else {
+                l.cards = [];
+                l.cards.push(card);
+              }
+              console.log(l);
+            }
+          }
+        }
+        return Boards.updateBoard(board);
+      };
+      this.deleteCard = function(card) {
+        var board, i, l, len, ref;
+        board = Boards.getBoard($stateParams.boardId);
+        ref = board.list;
+        for (i = 0, len = ref.length; i < len; i++) {
+          l = ref[i];
+          if (l.name === list.name) {
+            board.list.splice(board.list.indexOf(l), 1);
+          }
+        }
+        return Boards.updateBoard(board);
+      };
+    }
+
+    return Cards;
+
+  })();
+
+  angular.module('boardsModule').service('Cards', Cards);
+
+}).call(this);
+;(function() {
+  var Lists;
+
+  Lists = (function() {
+    function Lists($log, $rootScope, $stateParams, FIREBASE_BDD_URL, $firebaseArray, Boards) {
+      this.boardId = $stateParams.boardId;
+      this.createList = function(list) {
+        var board;
+        board = Boards.getBoard($stateParams.boardId);
+        if (board.list) {
+          board.list.push(list);
+        } else {
+          board.list = [];
+          board.list.push(list);
+        }
+        return Boards.updateBoard(board);
+      };
+      this.deleteList = function(list) {
+        var board, i, l, len, ref;
+        board = Boards.getBoard($stateParams.boardId);
+        ref = board.list;
+        for (i = 0, len = ref.length; i < len; i++) {
+          l = ref[i];
+          if (l.name === list.name) {
+            board.list.splice(board.list.indexOf(l), 1);
+          }
+        }
+        return Boards.updateBoard(board);
+      };
+    }
+
+    return Lists;
+
+  })();
+
+  angular.module('boardsModule').service('Lists', Lists);
 
 }).call(this);
 ;(function() {
@@ -214,8 +301,8 @@
           },
           'boards': {
             templateUrl: "views/Boards/board.html",
-            controller: "BoardsCtrl",
-            controllerAs: "Boards"
+            controller: "BoardCtrl",
+            controllerAs: "Board"
           }
         }
       });
@@ -339,6 +426,43 @@
   })();
 
   angular.module('authModule').controller('AuthCtrl', AuthCtrl);
+
+}).call(this);
+;(function() {
+  var BoardCtrl;
+
+  BoardCtrl = (function() {
+    function BoardCtrl($log, $scope, $stateParams, Lists, Boards, Cards) {
+      this.board = Boards.getBoard($stateParams.boardId);
+      if (this.board) {
+        this.list = this.board.list;
+      }
+      this.createList = function(newList) {
+        return Lists.createList(newList);
+      };
+      this.deleteList = function(list) {
+        return Lists.deleteList(list);
+      };
+      this.getListId = function(id) {
+        console.log(id);
+        return this.listId = id;
+      };
+      this.createCard = function(newCard, listId) {
+        return Cards.createCard(newCard, listId);
+      };
+      this.info = function(info) {
+        return console.log(info);
+      };
+      this.foo = function(data) {
+        return Boards.updateBoard(data);
+      };
+    }
+
+    return BoardCtrl;
+
+  })();
+
+  angular.module('boardsModule').controller('BoardCtrl', BoardCtrl);
 
 }).call(this);
 ;(function() {
