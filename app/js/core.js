@@ -115,14 +115,16 @@
       };
       this.updateBoard = function(board) {
         var boardInBdd;
-        boardInBdd = boardsArray.$getRecord(board.$id);
-        if (boardInBdd !== '') {
-          boardInBdd = board;
-          return boardsArray.$save(boardInBdd).then(function(ref) {
-            return console.log(ref.key() === boardInBdd.$id);
-          });
-        } else {
-          return console.log("Can't find this data");
+        if (board) {
+          boardInBdd = boardsArray.$getRecord(board.$id);
+          if (boardInBdd !== '') {
+            boardInBdd = board;
+            return boardsArray.$save(boardInBdd).then(function(ref) {
+              return console.log(ref.key() === boardInBdd.$id);
+            });
+          } else {
+            return console.log("Can't find this data");
+          }
         }
       };
       this.deleteBoard = function(board) {
@@ -142,14 +144,18 @@
 
   Cards = (function() {
     function Cards($log, $rootScope, $stateParams, FIREBASE_BDD_URL, $firebaseArray, Boards) {
+      var listsArray, listsRef;
       this.boardId = $stateParams.boardId;
+      listsRef = new Firebase(FIREBASE_BDD_URL + "/boards/" + this.boardId + "/");
+      listsArray = $firebaseArray(listsRef);
       this.createCard = function(card, listId) {
-        var board, i, l, len, ref;
+        var board, i, l, len, ref, results;
         console.log(card);
         console.log(listId);
         board = Boards.getBoard($stateParams.boardId);
         if (board.list) {
           ref = board.list;
+          results = [];
           for (i = 0, len = ref.length; i < len; i++) {
             l = ref[i];
             if (l.name === listId) {
@@ -159,11 +165,13 @@
                 l.cards = [];
                 l.cards.push(card);
               }
-              console.log(l);
+              results.push(console.log(l));
+            } else {
+              results.push(void 0);
             }
           }
+          return results;
         }
-        return Boards.updateBoard(board);
       };
       this.deleteCard = function(card) {
         var board, i, l, len, ref;
@@ -195,10 +203,10 @@
       this.createList = function(list) {
         var board;
         board = Boards.getBoard($stateParams.boardId);
-        if (board.list) {
+        if (!board.list) {
+          board.list = [];
           board.list.push(list);
         } else {
-          board.list = [];
           board.list.push(list);
         }
         return Boards.updateBoard(board);
@@ -301,6 +309,20 @@
           },
           'boards': {
             templateUrl: "views/Boards/board.html",
+            controller: "BoardCtrl",
+            controllerAs: "Board"
+          }
+        }
+      }).state('newListForm', {
+        url: "/boards/:boardId/newListForm",
+        views: {
+          'nav': {
+            templateUrl: "views/App/welcome.html",
+            controller: "AppCtrl",
+            controllerAs: "App"
+          },
+          'boards': {
+            templateUrl: "views/Boards/listForm.html",
             controller: "BoardCtrl",
             controllerAs: "Board"
           }
@@ -438,7 +460,13 @@
         this.list = this.board.list;
       }
       this.createList = function(newList) {
-        return Lists.createList(newList);
+        newList.cards = [
+          {
+            'name': 'Clear'
+          }
+        ];
+        Lists.createList(newList);
+        return delete this.newList;
       };
       this.deleteList = function(list) {
         return Lists.deleteList(list);
@@ -448,7 +476,8 @@
         return this.listId = id;
       };
       this.createCard = function(newCard, listId) {
-        return Cards.createCard(newCard, listId);
+        Cards.createCard(newCard, listId);
+        return delete this.newCard;
       };
       this.info = function(info) {
         return console.log(info);
