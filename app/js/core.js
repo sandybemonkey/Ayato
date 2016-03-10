@@ -149,38 +149,28 @@
       listsRef = new Firebase(FIREBASE_BDD_URL + "/boards/" + this.boardId + "/");
       listsArray = $firebaseArray(listsRef);
       this.createCard = function(card, listId) {
-        var board, i, l, len, ref, results;
-        console.log(card);
-        console.log(listId);
+        var board, i, l, len, ref;
         board = Boards.getBoard($stateParams.boardId);
         if (board.list) {
           ref = board.list;
-          results = [];
           for (i = 0, len = ref.length; i < len; i++) {
             l = ref[i];
-            if (l.name === listId) {
-              if (l.cards) {
-                l.cards.push(card);
-              } else {
-                l.cards = [];
-                l.cards.push(card);
-              }
-              results.push(console.log(l));
-            } else {
-              results.push(void 0);
-            }
+            l.cards.push(card);
+            console.log(l.cards);
           }
-          return results;
         }
+        return Boards.updateBoard(board);
       };
       this.deleteCard = function(card) {
         var board, i, l, len, ref;
         board = Boards.getBoard($stateParams.boardId);
-        ref = board.list;
-        for (i = 0, len = ref.length; i < len; i++) {
-          l = ref[i];
-          if (l.name === list.name) {
-            board.list.splice(board.list.indexOf(l), 1);
+        if (board.list) {
+          ref = board.list;
+          for (i = 0, len = ref.length; i < len; i++) {
+            l = ref[i];
+            if (l.name === list.name) {
+              board.list.splice(board.list.indexOf(l), 1);
+            }
           }
         }
         return Boards.updateBoard(board);
@@ -327,6 +317,20 @@
             controllerAs: "Board"
           }
         }
+      }).state('newCardForm', {
+        url: "/boards/:boardId/newCardForm",
+        views: {
+          'nav': {
+            templateUrl: "views/App/welcome.html",
+            controller: "AppCtrl",
+            controllerAs: "App"
+          },
+          'boards': {
+            templateUrl: "views/Boards/cardForm.html",
+            controller: "BoardCtrl",
+            controllerAs: "Board"
+          }
+        }
       });
     }
 
@@ -454,8 +458,9 @@
   var BoardCtrl;
 
   BoardCtrl = (function() {
-    function BoardCtrl($log, $scope, $stateParams, Lists, Boards, Cards) {
+    function BoardCtrl($log, $scope, $state, $stateParams, Lists, Boards, Cards) {
       this.board = Boards.getBoard($stateParams.boardId);
+      this.id = $stateParams.boardId;
       if (this.board) {
         this.list = this.board.list;
       }
@@ -466,18 +471,25 @@
           }
         ];
         Lists.createList(newList);
-        return delete this.newList;
+        delete this.newList;
+        return $state.go('boardsDetails', {
+          'boardId': this.id
+        });
       };
       this.deleteList = function(list) {
-        return Lists.deleteList(list);
+        Lists.deleteList(list);
+        return $state.reload();
       };
       this.getListId = function(id) {
         console.log(id);
         return this.listId = id;
       };
-      this.createCard = function(newCard, listId) {
-        Cards.createCard(newCard, listId);
-        return delete this.newCard;
+      this.createCard = function(newCard) {
+        Cards.createCard(newCard, this.id);
+        delete this.newCard;
+        return $state.go('boardsDetails', {
+          'boardId': this.id
+        });
       };
       this.info = function(info) {
         return console.log(info);
