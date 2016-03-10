@@ -1,9 +1,7 @@
 input {
 	border-radius: 35px;
 }
-ul{
-	display: inline-block;
-}
+
 .board .uk-offcanvas-bar {
     width: 700px;
 }
