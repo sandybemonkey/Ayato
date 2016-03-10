@@ -5,15 +5,16 @@
 		<base href="/">
 		<!-------------- stylesheets -------------->
 		<link rel="stylesheet" href="assets/css/animate.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
 		<link rel="stylesheet" href="libs/uikit/css/uikit.almost-flat.css">
 		<link rel="stylesheet" href="assets/css/app.css">
 
 	</head>
-	<body ng-app="Ayato">
+	<body ng-app="Ayato" class="flow-text white-text">
 
-		<div ui-view="nav" class="animated bounceInDown"></div>
-		<div ui-view="content" class="animated bounceInDown"></div>
-		<div ui-view="boards" id="boards" class="animated bounceInDown"></div>
+		<div ui-view="nav" class="animated fadeInDown"></div>
+		<div ui-view="content" class="animated fadeInDown"></div>
+		<div ui-view="boards" id="boards" class="animated fadeIn"></div>
 		
 
 		<!-- full size new Board modal -->
@@ -25,6 +26,20 @@
 		<div id="leftBar" class="uk-offcanvas">
 			<ng-include src="'views/Boards/leftMenu.html'"></ng-include>
 		</div>
+		<!-- This is the off-canvas sidebar -->
+		<div id="rightBar" class="board uk-offcanvas">
+			<ng-include src="'views/Boards/rightMenu.html'"></ng-include>
+		</div>
+
+		<div id="cardForm" class="uk-modal">
+		    <ng-include src="'views/Boards/cardForm.html'"></ng-include>
+		</div>
+
+		<!-- full size new Board modal -->
+		<div id="cardDetail" class="uk-modal">
+		    <ng-include src="'views/Boards/cardDetail.html'"></ng-include>
+		</div>
+
 		<!-------------- scripts -------------->
 		<script src="libs/jquery/dist/jquery.js"></script>
 	    <script src="libs/angular/angular.js"></script>
@@ -36,8 +51,10 @@
 	    <script src="libs/angular-ui-router/release/angular-ui-router.js"></script>
 	    <script src="libs/angular-aria/angular-aria.js"></script>
 	    <script src="libs/angular-messages/angular-messages.js"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
 	    <script src="libs/uikit/js/uikit.min.js"></script>
 	    <script type="text/javascript" src="libs/angular-sortable-view/src/angular-sortable-view.min.js"></script>
+	    
 	    <script src="js/core.js"></script>
 	</body>
 </html>
