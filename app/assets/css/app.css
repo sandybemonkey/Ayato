@@ -3,7 +3,6 @@ input {
 }
 ul{
 	display: inline-block;
-	margin: 2rem;
 }
 .board .uk-offcanvas-bar {
     width: 700px;
