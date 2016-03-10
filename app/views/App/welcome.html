@@ -4,10 +4,10 @@
         <ul class="uk-navbar-nav">
             <li ng-hide="user"><a ui-sref="signup">SignUp</a></li>
             <li ng-hide="user"><a ui-sref="login">LogIn</a></li>
-            <li ng-show="user"><a ng-click="App.logout()">Logout</a></li>
-            <li ng-show="user"><a data-uk-offcanvas="{target:'#leftBar'}"><i class="uk-icon-cog"></i></a></li>
+            <li ng-show="user" ng-controller="BoardCtrl as Board"><a ng-click="App.logout();Board.sauvegarde(Board.board)">Logout</a></li>
+            <li ng-show="user" ng-controller="BoardCtrl as Board"><a ui-sref="settings" ng-click="Board.sauvegarde(Board.board)"><i class="uk-icon-cog"></i></a></li>
         </ul>
-
+		
     </div>
     <div class="uk-navbar-content uk-navbar-center"><span class="uk-heading-large">Ayato</span></div>
 </nav>

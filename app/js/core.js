@@ -1,9 +1,9 @@
 (function() {
-  angular.module('App', []);
+  angular.module('authModule', ['ngStorage']);
 
 }).call(this);
 ;(function() {
-  angular.module('authModule', ['ngStorage']);
+  angular.module('App', []);
 
 }).call(this);
 ;(function() {
@@ -303,8 +303,6 @@
             controllerAs: "Board"
           }
         }
-<<<<<<< HEAD
-=======
       }).state('newListForm', {
         url: "/boards/:boardId/newListForm",
         views: {
@@ -333,7 +331,6 @@
             controllerAs: "Board"
           }
         }
->>>>>>> BoardTools
       });
     }
 
@@ -342,52 +339,6 @@
   })();
 
   angular.module('boardsModule').config(BoardsRoute);
-<<<<<<< HEAD
-=======
-
-}).call(this);
-;(function() {
-  var AyatoRoute;
-
-  AyatoRoute = (function() {
-    function AyatoRoute($stateProvider, $urlRouterProvider, $locationProvider) {
-      $urlRouterProvider.otherwise("/");
-      $stateProvider.state('home', {
-        url: "/",
-        views: {
-          'nav': {
-            templateUrl: "views/App/welcome.html",
-            controller: "AppCtrl",
-            controllerAs: "App"
-          }
-        }
-      });
-    }
-
-    return AyatoRoute;
-
-  })();
-
-  angular.module('Ayato').config(AyatoRoute);
->>>>>>> BoardTools
-
-}).call(this);
-;(function() {
-  var AppCtrl;
-
-  AppCtrl = (function() {
-    function AppCtrl($state, Auth, $rootScope) {
-      this.logout = function() {
-        Auth.logout();
-        return $state.go('login');
-      };
-    }
-
-    return AppCtrl;
-
-  })();
-
-  angular.module('App').controller('AppCtrl', AppCtrl);
 
 }).call(this);
 ;(function() {
@@ -461,6 +412,49 @@
 
 }).call(this);
 ;(function() {
+  var AyatoRoute;
+
+  AyatoRoute = (function() {
+    function AyatoRoute($stateProvider, $urlRouterProvider, $locationProvider) {
+      $urlRouterProvider.otherwise("/");
+      $stateProvider.state('home', {
+        url: "/",
+        views: {
+          'nav': {
+            templateUrl: "views/App/welcome.html",
+            controller: "AppCtrl",
+            controllerAs: "App"
+          }
+        }
+      });
+    }
+
+    return AyatoRoute;
+
+  })();
+
+  angular.module('Ayato').config(AyatoRoute);
+
+}).call(this);
+;(function() {
+  var AppCtrl;
+
+  AppCtrl = (function() {
+    function AppCtrl($state, Auth, $rootScope) {
+      this.logout = function() {
+        Auth.logout();
+        return $state.go('login');
+      };
+    }
+
+    return AppCtrl;
+
+  })();
+
+  angular.module('App').controller('AppCtrl', AppCtrl);
+
+}).call(this);
+;(function() {
   var BoardCtrl;
 
   BoardCtrl = (function() {
@@ -500,7 +494,7 @@
       this.info = function(info) {
         return console.log(info);
       };
-      this.foo = function(data) {
+      this.sauvegarde = function(data) {
         return Boards.updateBoard(data);
       };
     }
