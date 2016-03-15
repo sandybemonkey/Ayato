@@ -4,6 +4,17 @@ input {
 	border-radius: 35px;
 }
 h1, h2, h3, h4, h5, h6 {color: #dd2c00;}
+
+.listDelete {
+    font-size: 2rem;
+    color: red;
+}
+.listDelete a{
+    color: red;
+}
+.listDelete a:hover {
+    color: #fff;
+}
 a:hover, .uk-link {color: #dd2c00;}
 .btn:hover{color: #000;background-color: #424242;}
 .btn, .btn-large {background-color: #dd2c00;}

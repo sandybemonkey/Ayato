@@ -1,9 +1,9 @@
 (function() {
-  angular.module('authModule', ['ngStorage']);
+  angular.module('App', []);
 
 }).call(this);
 ;(function() {
-  angular.module('App', []);
+  angular.module('authModule', ['ngStorage']);
 
 }).call(this);
 ;(function() {
@@ -144,19 +144,15 @@
 
   Cards = (function() {
     function Cards($log, $rootScope, $stateParams, FIREBASE_BDD_URL, $firebaseArray, Boards) {
-      var listsArray, listsRef;
-      this.boardId = $stateParams.boardId;
-      listsRef = new Firebase(FIREBASE_BDD_URL + "/boards/" + this.boardId + "/");
-      listsArray = $firebaseArray(listsRef);
-      this.createCard = function(card, listId) {
-        var board, i, l, len, ref;
-        board = Boards.getBoard($stateParams.boardId);
-        if (board.list) {
-          ref = board.list;
-          for (i = 0, len = ref.length; i < len; i++) {
-            l = ref[i];
+      this.createCard = function(card, board, listName) {
+        var i, l, len, ref;
+        ref = board.list;
+        for (i = 0, len = ref.length; i < len; i++) {
+          l = ref[i];
+          if (l.name === listName) {
+            console.log(l.cards.length);
             l.cards.push(card);
-            console.log(l.cards);
+            console.log(l.cards.length);
           }
         }
         return Boards.updateBoard(board);
@@ -318,7 +314,7 @@
           }
         }
       }).state('newCardForm', {
-        url: "/boards/:boardId/newCardForm",
+        url: "/boards/:boardId/:listName/newCardForm",
         views: {
           'nav': {
             templateUrl: "views/App/welcome.html",
@@ -339,6 +335,49 @@
   })();
 
   angular.module('boardsModule').config(BoardsRoute);
+
+}).call(this);
+;(function() {
+  var AyatoRoute;
+
+  AyatoRoute = (function() {
+    function AyatoRoute($stateProvider, $urlRouterProvider, $locationProvider) {
+      $urlRouterProvider.otherwise("/");
+      $stateProvider.state('home', {
+        url: "/",
+        views: {
+          'nav': {
+            templateUrl: "views/App/welcome.html",
+            controller: "AppCtrl",
+            controllerAs: "App"
+          }
+        }
+      });
+    }
+
+    return AyatoRoute;
+
+  })();
+
+  angular.module('Ayato').config(AyatoRoute);
+
+}).call(this);
+;(function() {
+  var AppCtrl;
+
+  AppCtrl = (function() {
+    function AppCtrl($state, Auth, $rootScope) {
+      this.logout = function() {
+        Auth.logout();
+        return $state.go('login');
+      };
+    }
+
+    return AppCtrl;
+
+  })();
+
+  angular.module('App').controller('AppCtrl', AppCtrl);
 
 }).call(this);
 ;(function() {
@@ -412,53 +451,13 @@
 
 }).call(this);
 ;(function() {
-  var AyatoRoute;
-
-  AyatoRoute = (function() {
-    function AyatoRoute($stateProvider, $urlRouterProvider, $locationProvider) {
-      $urlRouterProvider.otherwise("/");
-      $stateProvider.state('home', {
-        url: "/",
-        views: {
-          'nav': {
-            templateUrl: "views/App/welcome.html",
-            controller: "AppCtrl",
-            controllerAs: "App"
-          }
-        }
-      });
-    }
-
-    return AyatoRoute;
-
-  })();
-
-  angular.module('Ayato').config(AyatoRoute);
-
-}).call(this);
-;(function() {
-  var AppCtrl;
-
-  AppCtrl = (function() {
-    function AppCtrl($state, Auth, $rootScope) {
-      this.logout = function() {
-        Auth.logout();
-        return $state.go('login');
-      };
-    }
-
-    return AppCtrl;
-
-  })();
-
-  angular.module('App').controller('AppCtrl', AppCtrl);
-
-}).call(this);
-;(function() {
   var BoardCtrl;
 
   BoardCtrl = (function() {
-    function BoardCtrl($log, $scope, $state, $stateParams, Lists, Boards, Cards) {
+    function BoardCtrl($log, $rootScope, $state, $stateParams, Lists, Boards, Cards) {
+      if (!$rootScope.user) {
+        $state('login');
+      }
       this.board = Boards.getBoard($stateParams.boardId);
       this.id = $stateParams.boardId;
       if (this.board) {
@@ -485,7 +484,9 @@
         return this.listId = id;
       };
       this.createCard = function(newCard) {
-        Cards.createCard(newCard, this.id);
+        var listName;
+        listName = $stateParams.listName;
+        Cards.createCard(newCard, this.board, listName);
         delete this.newCard;
         return $state.go('boardsDetails', {
           'boardId': this.id
@@ -495,7 +496,17 @@
         return console.log(info);
       };
       this.sauvegarde = function(data) {
-        return Boards.updateBoard(data);
+        Boards.updateBoard(data);
+        return $state.go('boardsDetails', {
+          'boardId': this.id
+        });
+      };
+      this.homeBtnSaved = function() {
+        Boards.updateBoard(this.board);
+        return $state.go('boards');
+      };
+      this.saveList = function(data) {
+        return this.board = data;
       };
     }
 
@@ -510,7 +521,10 @@
   var BoardsCtrl;
 
   BoardsCtrl = (function() {
-    function BoardsCtrl($log, Boards) {
+    function BoardsCtrl($log, $rootScope, Boards) {
+      if (!$rootScope.user) {
+        $state('login');
+      }
       this.boardsList = Boards.getAll();
       this.menu = function(d) {
         UIkit.offcanvas.show('#rightBar');
