@@ -15,7 +15,8 @@ h1, h2, h3, h4, h5, h6 {color: #dd2c00;}
 .listDelete a:hover {
     color: #fff;
 }
-a:hover, .uk-link {color: #dd2c00;}
+a, .uk-link {color: black;}
+a:hover, .uk-link {color: white;}
 .btn:hover{color: #000;background-color: #424242;}
 .btn, .btn-large {background-color: #dd2c00;}
 .btn-flat {color: #fff;}

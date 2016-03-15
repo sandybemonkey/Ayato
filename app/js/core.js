@@ -455,9 +455,6 @@
 
   BoardCtrl = (function() {
     function BoardCtrl($log, $rootScope, $state, $stateParams, Lists, Boards, Cards) {
-      if (!$rootScope.authUser) {
-        $state.go('login');
-      }
       this.board = Boards.getBoard($stateParams.boardId);
       this.id = $stateParams.boardId;
       if (this.board) {
