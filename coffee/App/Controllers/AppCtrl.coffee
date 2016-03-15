@@ -1,5 +1,5 @@
 class AppCtrl
-	constructor: ($state, Auth, $rootScope)->
+	constructor: (Auth, $rootScope, $state)->
 		@logout =->
 			Auth.logout()
 			$state.go 'login'

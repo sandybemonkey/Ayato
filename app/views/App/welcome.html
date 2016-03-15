@@ -2,12 +2,12 @@
     <div class="uk-navbar-flip">
 
         <ul class="uk-navbar-nav">
-            <li ng-hide="user"><a ui-sref="signup">SignUp</a></li>
-            <li ng-hide="user"><a ui-sref="login">LogIn</a></li>
-            <li ng-show="user" ng-click="App.logout()">
+            <li ng-hide="authUser"><a ui-sref="signup">SignUp</a></li>
+            <li ng-hide="authUser"><a ui-sref="login">LogIn</a></li>
+            <li ng-show="authUser" ng-click="App.logout()">
                 <a ng-controller="BoardCtrl as Board" ng-click="Board.sauvegarde(Board.board)">Logout</a>
             </li>
-            <li ng-show="user">
+            <li ng-show="authUser">
                 <a ui-sref="settings">
                     <i class="uk-icon-cog"></i>
                 </a>

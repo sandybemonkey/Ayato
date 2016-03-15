@@ -33,7 +33,7 @@
           if (userData) {
             userData.provider = data.provider;
             userData.password = data.password;
-            $rootScope.user = userData;
+            $rootScope.authUser = userData;
             return $sessionStorage.userSession = userData;
           } else {
             return console.log('your are logout');
@@ -42,7 +42,7 @@
       };
       authObj.$onAuth(function(data) {
         if ($sessionStorage.userSession) {
-          return $rootScope.user = $sessionStorage.userSession;
+          return $rootScope.authUser = $sessionStorage.userSession;
         } else {
           return setUserAuthInfo(data);
         }
@@ -79,7 +79,7 @@
         return authObj.$requireAuth();
       };
       this.logout = function() {
-        delete $rootScope.user;
+        delete $rootScope.authUser;
         delete $sessionStorage.userSession;
         return authObj.$unauth();
       };
@@ -366,7 +366,7 @@
   var AppCtrl;
 
   AppCtrl = (function() {
-    function AppCtrl($state, Auth, $rootScope) {
+    function AppCtrl(Auth, $rootScope, $state) {
       this.logout = function() {
         Auth.logout();
         return $state.go('login');
@@ -455,8 +455,8 @@
 
   BoardCtrl = (function() {
     function BoardCtrl($log, $rootScope, $state, $stateParams, Lists, Boards, Cards) {
-      if (!$rootScope.user) {
-        $state('login');
+      if (!$rootScope.authUser) {
+        $state.go('login');
       }
       this.board = Boards.getBoard($stateParams.boardId);
       this.id = $stateParams.boardId;
@@ -521,9 +521,9 @@
   var BoardsCtrl;
 
   BoardsCtrl = (function() {
-    function BoardsCtrl($log, $rootScope, Boards) {
-      if (!$rootScope.user) {
-        $state('login');
+    function BoardsCtrl($log, $state, $rootScope, Boards) {
+      if (!$rootScope.authUser) {
+        $state.go('login');
       }
       this.boardsList = Boards.getAll();
       this.menu = function(d) {

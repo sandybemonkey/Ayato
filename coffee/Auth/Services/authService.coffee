@@ -11,14 +11,14 @@ class Auth
         if userData
           userData.provider = data.provider
           userData.password = data.password
-          $rootScope.user = userData
+          $rootScope.authUser = userData
           $sessionStorage.userSession = userData
         else
           console.log 'your are logout'
     
     authObj.$onAuth (data)->
       if $sessionStorage.userSession
-        $rootScope.user = $sessionStorage.userSession
+        $rootScope.authUser = $sessionStorage.userSession
       else
         setUserAuthInfo data
     
@@ -56,7 +56,7 @@ class Auth
     
 
     @logout = ->
-      delete $rootScope.user
+      delete $rootScope.authUser
       delete $sessionStorage.userSession
       authObj.$unauth()
       
